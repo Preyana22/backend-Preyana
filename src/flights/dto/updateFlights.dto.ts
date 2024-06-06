@@ -2,7 +2,7 @@ import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
 import { User } from '../../users/user.schema';
 import { Exclude, Type } from 'class-transformer';
 import { Category } from '../../categories/category.schema';
-import { Series } from '../../series/series.schema';
+
 
 export class UpdatePostDto {
   @IsOptional()
@@ -24,9 +24,7 @@ export class UpdatePostDto {
   @IsNotEmpty()
   author: User;
 
-  @Type(() => Series)
-  @IsOptional()
-  series?: Series;
+ 
 }
 
 export default UpdatePostDto;

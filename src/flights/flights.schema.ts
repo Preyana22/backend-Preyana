@@ -4,7 +4,7 @@ import * as mongoose from 'mongoose';
 import { User } from '../users/user.schema';
 import { Transform, Type } from 'class-transformer';
 import { Category } from '../categories/category.schema';
-import { Series } from '../series/series.schema';
+
 
 export type PostDocument = Post & Document;
 
