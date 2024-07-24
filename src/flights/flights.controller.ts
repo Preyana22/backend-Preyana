@@ -37,9 +37,7 @@ export default class PostsController {
 
     let Result=[];
     const duffelHeaders = {
-      "Duffel-Version": "v1",
-
-     
+      "Duffel-Version": "v1",     
       Authorization: 'Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD',
     };
    const getAirports = await fetch(
@@ -65,10 +63,6 @@ export default class PostsController {
   ) {
    // return this.postService.findAll(skip, limit, startId, searchQuery);
   }
-
-
-
-
 
   @Post('test')
 
@@ -142,32 +136,68 @@ for(var i =0; i<=req.numOfPassengers.adult; i++){
   @Post('book')
 
   async booking(@Body() @Req() request: any) {
-    const duffel = new Duffel({
-      token: "duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
-    })
-   
-    const duffelHeaders = {
+
+    console.log("in ts");
+
+    var data = {
+      "type": "instant",
+      "selected_offers": [
+          "off_00009htYpSCXrwaB9DnUm0"
+      ],
+      "payments": [
+          {
+              "type": "balance",
+              "amount": "120.00",
+              "currency": "EUR"
+          }
+      ],
+      "metadata": {
+          "payment_intent_id": "pit_00009hthhsUZ8W4LxQgkjo"
+      },
+      "passengers": []
+  };
+
+  const duffelHeaders = {
       "Duffel-Version": "v1",
       "Accept-Encoding": "gzip",
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization: 'Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD',
-    };
-    const createOrderOnDuffelResponse = await fetch(
-      "https://api.duffel.com/air/orders",
-      {
-        method: "POST",
-        headers: duffelHeaders,
-        body: JSON.stringify(request),
-        
-       
-      }
-    );
-  
-   
-    return createOrderOnDuffelResponse.text();
+  };
 
- 
+
+  const clone = JSON.parse(JSON.stringify(request));
+  delete clone.payments;
+  var data1 = {data:
+      clone
+  }
+
+  console.log("data");
+  console.log(data);
+
+  
+
+  var payments = {data:
+      request.payments
+  }
+
+  console.log(payments);
+
+  const createOrderOnDuffelResponse = await fetch("https://api.duffel.com/air/orders", {
+      method: "POST",
+      headers: duffelHeaders,
+      body: JSON.stringify(data1),
+  });
+ //console.log(await createOrderOnDuffelResponse.text())
+
+  const createPaymentIntent = await fetch("//api.duffel.com/payments/payment_intents", {
+      method: "POST",
+      headers: duffelHeaders,
+      body: JSON.stringify(payments),
+  });
+
+//
+  return  createPaymentIntent.text();
    
   }
 
