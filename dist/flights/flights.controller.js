@@ -121,7 +121,7 @@ let PostsController = class PostsController {
             headers: duffelHeaders,
             body: JSON.stringify(data1),
         });
-        const createPaymentIntent = await fetch("https:", {
+        const createPaymentIntent = await fetch("https://api.duffel.com/payments/payment_intents", {
             method: "POST",
             headers: duffelHeaders,
             body: JSON.stringify(payments),
