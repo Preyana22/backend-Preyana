@@ -190,7 +190,7 @@ for(var i =0; i<=req.numOfPassengers.adult; i++){
   });
  //console.log(await createOrderOnDuffelResponse.text())
 
-  const createPaymentIntent = await fetch("//api.duffel.com/payments/payment_intents", {
+  const createPaymentIntent = await fetch("https://api.duffel.com/payments/payment_intents", {
       method: "POST",
       headers: duffelHeaders,
       body: JSON.stringify(payments),

@@ -28,7 +28,7 @@ let AuthenticationController = class AuthenticationController {
     }
     async logIn(request) {
         var _a;
-        console.log("request.body" + JSON.stringify(request.body));
+        console.log("request.bodyk" + JSON.stringify(request.body));
         const user = request.body;
         const results = this.authenticationService.getAuthenticatedUser(request.body.email, request.body.password);
         console.log("cookies" + JSON.stringify(results));

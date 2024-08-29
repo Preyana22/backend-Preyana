@@ -23,12 +23,13 @@ let AuthenticationService = class AuthenticationService {
         this.configService = configService;
     }
     async register(registrationData) {
+        var _a;
         const hashedPassword = await bcrypt.hash(registrationData.password, 10);
         try {
             return await this.usersService.create(Object.assign(Object.assign({}, registrationData), { password: hashedPassword }));
         }
         catch (error) {
-            if ((error === null || error === void 0 ? void 0 : error.code) === mongoError_enum_1.default.DuplicateKey) {
+            if (((_a = error) === null || _a === void 0 ? void 0 : _a.code) === mongoError_enum_1.default.DuplicateKey) {
                 throw new common_1.HttpException('User with that email already exists', common_1.HttpStatus.BAD_REQUEST);
             }
             throw new common_1.HttpException('Something went wrong', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
