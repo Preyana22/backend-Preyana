@@ -112,21 +112,33 @@ let PostsController = class PostsController {
         var data1 = { data: clone
         };
         console.log("data");
-        console.log(data);
+        console.log(data1);
         var payments = { data: request.payments
         };
-        console.log(payments);
+        console.log('payments', payments);
         const createOrderOnDuffelResponse = await fetch("https://api.duffel.com/air/orders", {
             method: "POST",
             headers: duffelHeaders,
             body: JSON.stringify(data1),
         });
+        const orderResponseText = await createOrderOnDuffelResponse.json();
+        console.log("Order Response:", orderResponseText);
         const createPaymentIntent = await fetch("https://api.duffel.com/payments/payment_intents", {
             method: "POST",
             headers: duffelHeaders,
             body: JSON.stringify(payments),
         });
-        return createPaymentIntent.text();
+        const paymentIntentText = await createPaymentIntent.json();
+        console.log("Payment Intent Response:", paymentIntentText);
+        const combinedResponse = {
+            orderResponse: orderResponseText,
+            paymentIntentResponse: paymentIntentText,
+        };
+        console.log("Combined Response:", combinedResponse);
+        return {
+            data: combinedResponse,
+            errors: null,
+        };
     }
 };
 __decorate([

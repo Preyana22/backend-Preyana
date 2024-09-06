@@ -173,7 +173,7 @@ for(var i =0; i<=req.numOfPassengers.adult; i++){
   }
 
   console.log("data");
-  console.log(data);
+  console.log(data1);
 
   
 
@@ -181,23 +181,37 @@ for(var i =0; i<=req.numOfPassengers.adult; i++){
       request.payments
   }
 
-  console.log(payments);
+  console.log('payments' , payments);
 
+ // Making the first API call to create the order
   const createOrderOnDuffelResponse = await fetch("https://api.duffel.com/air/orders", {
-      method: "POST",
-      headers: duffelHeaders,
-      body: JSON.stringify(data1),
+    method: "POST",
+    headers: duffelHeaders,
+    body: JSON.stringify(data1),
   });
- //console.log(await createOrderOnDuffelResponse.text())
+  const orderResponseText = await createOrderOnDuffelResponse.json();
+  console.log("Order Response:", orderResponseText);
 
+  // Making the second API call to create the payment intent
   const createPaymentIntent = await fetch("https://api.duffel.com/payments/payment_intents", {
-      method: "POST",
-      headers: duffelHeaders,
-      body: JSON.stringify(payments),
+    method: "POST",
+    headers: duffelHeaders,
+    body: JSON.stringify(payments),
   });
+  const paymentIntentText = await createPaymentIntent.json();
+  console.log("Payment Intent Response:", paymentIntentText);
 
-//
-  return  createPaymentIntent.text();
+  // Combining both responses into a single object
+  const combinedResponse = {
+    orderResponse: orderResponseText,
+    paymentIntentResponse: paymentIntentText,
+  };
+console.log("Combined Response:", combinedResponse);
+  // Returning the combined response as JSON
+  return {
+    data: combinedResponse,
+    errors: null,
+  };
    
   }
 

@@ -6,5 +6,11 @@ export default class PostsController {
     getFlight(): Promise<string>;
     getAllPosts({ skip, limit, startId }: PaginationParams, searchQuery: string): Promise<void>;
     airliness(req: any): Promise<string>;
-    booking(request: any): Promise<string>;
+    booking(request: any): Promise<{
+        data: {
+            orderResponse: any;
+            paymentIntentResponse: any;
+        };
+        errors: null;
+    }>;
 }
