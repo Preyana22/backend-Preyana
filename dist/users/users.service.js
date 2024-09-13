@@ -25,9 +25,9 @@ let UsersService = class UsersService {
     }
     async getByEmail(email) {
         const user = await this.userModel.findOne({ email }).populate({
-            path: 'users',
+            path: "users",
             populate: {
-                path: 'email',
+                path: "email",
             },
         });
         if (!user) {
@@ -37,9 +37,9 @@ let UsersService = class UsersService {
     }
     async getById(id) {
         const user = await this.userModel.findById(id).populate({
-            path: 'users',
+            path: "users",
             populate: {
-                path: 'email',
+                path: "email",
             },
         });
         if (!user) {
@@ -51,13 +51,17 @@ let UsersService = class UsersService {
         const createdUser = new this.userModel(userData);
         await createdUser
             .populate({
-            path: 'users',
+            path: "users",
             populate: {
-                path: 'email',
+                path: "email",
             },
         })
             .execPopulate();
-        return createdUser.save();
+        await createdUser.save();
+        return {
+            message: "User created successfully",
+            user: createdUser,
+        };
     }
     async delete(userId) {
         const session = await this.connection.startSession();
@@ -65,7 +69,7 @@ let UsersService = class UsersService {
         try {
             const user = await this.userModel
                 .findByIdAndDelete(userId)
-                .populate('posts')
+                .populate("posts")
                 .session(session);
             if (!user) {
                 throw new common_1.NotFoundException();

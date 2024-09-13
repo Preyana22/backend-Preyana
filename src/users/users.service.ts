@@ -1,25 +1,25 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { UserDocument, User } from './user.schema';
-import CreateUserDto from './dto/createUser.dto';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import { UserDocument, User } from "./user.schema";
+import CreateUserDto from "./dto/createUser.dto";
 
-import { InjectConnection } from '@nestjs/mongoose';
-import * as mongoose from 'mongoose';
+import { InjectConnection } from "@nestjs/mongoose";
+import * as mongoose from "mongoose";
 
 @Injectable()
 class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
 
-    @InjectConnection() private readonly connection: mongoose.Connection,
+    @InjectConnection() private readonly connection: mongoose.Connection
   ) {}
 
   async getByEmail(email: string) {
     const user = await this.userModel.findOne({ email }).populate({
-      path: 'users',
+      path: "users",
       populate: {
-        path: 'email',
+        path: "email",
       },
     });
 
@@ -32,9 +32,9 @@ class UsersService {
 
   async getById(id: string) {
     const user = await this.userModel.findById(id).populate({
-      path: 'users',
+      path: "users",
       populate: {
-        path: 'email',
+        path: "email",
       },
     });
 
@@ -47,15 +47,23 @@ class UsersService {
 
   async create(userData: CreateUserDto) {
     const createdUser = new this.userModel(userData);
+
     await createdUser
       .populate({
-        path: 'users',
+        path: "users",
         populate: {
-          path: 'email',
+          path: "email",
         },
       })
       .execPopulate();
-    return createdUser.save();
+
+    await createdUser.save();
+
+    // Return a success message
+    return {
+      message: "User created successfully",
+      user: createdUser, // Optionally return the created user data
+    };
   }
 
   async delete(userId: string) {
@@ -65,7 +73,7 @@ class UsersService {
     try {
       const user = await this.userModel
         .findByIdAndDelete(userId)
-        .populate('posts')
+        .populate("posts")
         .session(session);
 
       if (!user) {
@@ -73,7 +81,6 @@ class UsersService {
       }
       const posts = user.posts;
 
-     
       await session.commitTransaction();
     } catch (error) {
       await session.abortTransaction();
