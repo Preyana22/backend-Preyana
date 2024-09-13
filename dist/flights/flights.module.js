@@ -14,7 +14,7 @@ const flights_schema_1 = require("./flights.schema");
 let PostsModule = class PostsModule {
 };
 PostsModule = __decorate([
-    common_1.Module({
+    (0, common_1.Module)({
         imports: [
             mongoose_1.MongooseModule.forFeature([{ name: flights_schema_1.Post.name, schema: flights_schema_1.PostSchema }]),
         ],

@@ -1,7 +1,7 @@
 import { Document, ObjectId } from 'mongoose';
 import { Address } from './address.schema';
 import { Post } from '../flights/flights.schema';
-export declare type UserDocument = User & Document;
+export type UserDocument = User & Document;
 export declare class User {
     _id: ObjectId;
     email: string;

@@ -83,9 +83,9 @@ let UsersService = class UsersService {
     }
 };
 UsersService = __decorate([
-    common_1.Injectable(),
-    __param(0, mongoose_1.InjectModel(user_schema_1.User.name)),
-    __param(1, mongoose_3.InjectConnection()),
+    (0, common_1.Injectable)(),
+    __param(0, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
+    __param(1, (0, mongoose_3.InjectConnection)()),
     __metadata("design:paramtypes", [mongoose_2.Model, mongoose.Connection])
 ], UsersService);
 exports.default = UsersService;

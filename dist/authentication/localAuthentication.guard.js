@@ -9,10 +9,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LocalAuthenticationGuard = void 0;
 const common_1 = require("@nestjs/common");
 const passport_1 = require("@nestjs/passport");
-let LocalAuthenticationGuard = class LocalAuthenticationGuard extends passport_1.AuthGuard('local') {
+let LocalAuthenticationGuard = class LocalAuthenticationGuard extends (0, passport_1.AuthGuard)('local') {
 };
 LocalAuthenticationGuard = __decorate([
-    common_1.Injectable()
+    (0, common_1.Injectable)()
 ], LocalAuthenticationGuard);
 exports.LocalAuthenticationGuard = LocalAuthenticationGuard;
 //# sourceMappingURL=localAuthentication.guard.js.map

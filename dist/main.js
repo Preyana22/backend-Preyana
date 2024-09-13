@@ -9,8 +9,8 @@ async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.useGlobalPipes(new common_1.ValidationPipe({ transform: true }));
     app.use(cookieParser());
-    app.use(cors_ts_1.default({
-        origin: '*',
+    app.use((0, cors_ts_1.default)({
+        origin: ['http://localhost:3001', 'http://52.14.78.149'],
         optionsSuccessStatus: 200,
     }));
     await app.listen(3000);

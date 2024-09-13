@@ -13,11 +13,12 @@ const config_1 = require("@nestjs/config");
 const flights_module_1 = require("./flights/flights.module");
 const Joi = require("@hapi/joi");
 const authentication_module_1 = require("./authentication/authentication.module");
+const booking_module_1 = require("./booking/booking.module");
 const categories_module_1 = require("./categories/categories.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
-    common_1.Module({
+    (0, common_1.Module)({
         imports: [
             config_1.ConfigModule.forRoot({
                 validationSchema: Joi.object({
@@ -40,6 +41,7 @@ AppModule = __decorate([
             flights_module_1.default,
             authentication_module_1.AuthenticationModule,
             categories_module_1.default,
+            booking_module_1.BookingModule,
         ],
         controllers: [],
         providers: [],

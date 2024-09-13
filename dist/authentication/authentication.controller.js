@@ -28,7 +28,7 @@ let AuthenticationController = class AuthenticationController {
     }
     async logIn(request) {
         var _a;
-        console.log("request.bodyk" + JSON.stringify(request.body));
+        console.log("request.body" + JSON.stringify(request.body));
         const user = request.body;
         const results = this.authenticationService.getAuthenticatedUser(request.body.email, request.body.password);
         console.log("cookies" + JSON.stringify(results));
@@ -45,38 +45,38 @@ let AuthenticationController = class AuthenticationController {
     }
 };
 __decorate([
-    common_1.Post('register'),
-    __param(0, common_1.Body()),
+    (0, common_1.Post)('register'),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [register_dto_1.default]),
     __metadata("design:returntype", Promise)
 ], AuthenticationController.prototype, "register", null);
 __decorate([
-    common_1.Post('log-in'),
-    __param(0, common_1.Req()),
+    (0, common_1.Post)('log-in'),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthenticationController.prototype, "logIn", null);
 __decorate([
-    common_1.UseGuards(jwt_authentication_guard_1.default),
-    common_1.Post('log-out'),
-    common_1.HttpCode(200),
-    __param(0, common_1.Req()),
+    (0, common_1.UseGuards)(jwt_authentication_guard_1.default),
+    (0, common_1.Post)('log-out'),
+    (0, common_1.HttpCode)(200),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthenticationController.prototype, "logOut", null);
 __decorate([
-    common_1.Get(),
-    __param(0, common_1.Req()),
+    (0, common_1.Get)(),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthenticationController.prototype, "authenticate", null);
 AuthenticationController = __decorate([
-    common_1.Controller('authentication'),
-    common_1.UseInterceptors(mongooseClassSerializer_interceptor_1.default(user_schema_1.User)),
+    (0, common_1.Controller)('authentication'),
+    (0, common_1.UseInterceptors)((0, mongooseClassSerializer_interceptor_1.default)(user_schema_1.User)),
     __metadata("design:paramtypes", [authentication_service_1.AuthenticationService])
 ], AuthenticationController);
 exports.AuthenticationController = AuthenticationController;

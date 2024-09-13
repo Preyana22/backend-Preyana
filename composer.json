@@ -1,0 +1,5 @@
+{
+    "require": {
+        "duffel/api": "dev-main"
+    }
+}

@@ -9,7 +9,7 @@ function MongooseClassSerializerInterceptor(classToIntercept) {
             if (!(document instanceof mongoose_1.Document)) {
                 return document;
             }
-            return class_transformer_1.plainToClass(classToIntercept, document.toJSON());
+            return (0, class_transformer_1.plainToClass)(classToIntercept, document.toJSON());
         }
         prepareResponse(response) {
             if (!Array.isArray(response) && response.results) {

@@ -14,8 +14,8 @@ const class_validator_1 = require("class-validator");
 class CategoryDto {
 }
 __decorate([
-    class_validator_1.IsString(),
-    class_validator_1.IsNotEmpty(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CategoryDto.prototype, "name", void 0);
 exports.CategoryDto = CategoryDto;

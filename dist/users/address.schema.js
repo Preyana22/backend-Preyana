@@ -15,19 +15,19 @@ const class_transformer_1 = require("class-transformer");
 let Address = class Address {
 };
 __decorate([
-    class_transformer_1.Transform(({ value }) => value.toString()),
+    (0, class_transformer_1.Transform)(({ value }) => value.toString()),
     __metadata("design:type", String)
 ], Address.prototype, "_id", void 0);
 __decorate([
-    mongoose_1.Prop(),
+    (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], Address.prototype, "city", void 0);
 __decorate([
-    mongoose_1.Prop(),
+    (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], Address.prototype, "street", void 0);
 Address = __decorate([
-    mongoose_1.Schema()
+    (0, mongoose_1.Schema)()
 ], Address);
 exports.Address = Address;
 exports.AddressSchema = mongoose_1.SchemaFactory.createForClass(Address);

@@ -15,15 +15,15 @@ const class_transformer_1 = require("class-transformer");
 let Category = class Category {
 };
 __decorate([
-    class_transformer_1.Transform(({ value }) => value.toString()),
+    (0, class_transformer_1.Transform)(({ value }) => value.toString()),
     __metadata("design:type", Object)
 ], Category.prototype, "_id", void 0);
 __decorate([
-    mongoose_1.Prop(),
+    (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], Category.prototype, "name", void 0);
 Category = __decorate([
-    mongoose_1.Schema()
+    (0, mongoose_1.Schema)()
 ], Category);
 exports.Category = Category;
 exports.CategorySchema = mongoose_1.SchemaFactory.createForClass(Category);

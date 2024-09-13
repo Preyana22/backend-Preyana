@@ -1,5 +1,5 @@
 import { Document, ObjectId } from 'mongoose';
-export declare type CategoryDocument = Category & Document;
+export type CategoryDocument = Category & Document;
 export declare class Category {
     _id: ObjectId;
     name: string;

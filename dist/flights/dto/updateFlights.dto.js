@@ -17,27 +17,27 @@ const category_schema_1 = require("../../categories/category.schema");
 class UpdatePostDto {
 }
 __decorate([
-    class_validator_1.IsOptional(),
-    class_transformer_1.Exclude(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_transformer_1.Exclude)(),
     __metadata("design:type", String)
 ], UpdatePostDto.prototype, "_id", void 0);
 __decorate([
-    class_validator_1.IsString(),
-    class_validator_1.IsNotEmpty(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], UpdatePostDto.prototype, "title", void 0);
 __decorate([
-    class_validator_1.IsString(),
-    class_validator_1.IsNotEmpty(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], UpdatePostDto.prototype, "content", void 0);
 __decorate([
-    class_transformer_1.Type(() => category_schema_1.Category),
+    (0, class_transformer_1.Type)(() => category_schema_1.Category),
     __metadata("design:type", Array)
 ], UpdatePostDto.prototype, "categories", void 0);
 __decorate([
-    class_transformer_1.Type(() => user_schema_1.User),
-    class_validator_1.IsNotEmpty(),
+    (0, class_transformer_1.Type)(() => user_schema_1.User),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", user_schema_1.User)
 ], UpdatePostDto.prototype, "author", void 0);
 exports.UpdatePostDto = UpdatePostDto;

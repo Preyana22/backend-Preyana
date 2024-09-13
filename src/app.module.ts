@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import PostsModule from './flights/flights.module';
 import * as Joi from '@hapi/joi';
 import { AuthenticationModule } from './authentication/authentication.module';
+import { BookingModule } from './booking/booking.module';
 import CategoriesModule from './categories/categories.module';
 
 
@@ -35,6 +36,7 @@ import CategoriesModule from './categories/categories.module';
     PostsModule,
     AuthenticationModule,
     CategoriesModule,
+    BookingModule,
 
   ],
   controllers: [],

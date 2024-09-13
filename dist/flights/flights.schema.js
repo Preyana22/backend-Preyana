@@ -18,11 +18,11 @@ let Post = class Post {
     }
 };
 __decorate([
-    class_transformer_1.Transform(({ value }) => value.toString()),
+    (0, class_transformer_1.Transform)(({ value }) => value.toString()),
     __metadata("design:type", Object)
 ], Post.prototype, "_id", void 0);
 Post = __decorate([
-    mongoose_1.Schema({ collection: 'airports' })
+    (0, mongoose_1.Schema)({ collection: 'airports' })
 ], Post);
 exports.Post = Post;
 const PostSchema = mongoose_1.SchemaFactory.createForClass(Post);

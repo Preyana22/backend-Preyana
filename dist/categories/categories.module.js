@@ -14,7 +14,7 @@ const category_schema_1 = require("./category.schema");
 let CategoriesModule = class CategoriesModule {
 };
 CategoriesModule = __decorate([
-    common_1.Module({
+    (0, common_1.Module)({
         imports: [
             mongoose_1.MongooseModule.forFeature([
                 { name: category_schema_1.Category.name, schema: category_schema_1.CategorySchema },

@@ -13,7 +13,7 @@ const class_validator_1 = require("class-validator");
 class ParamsWithId {
 }
 __decorate([
-    class_validator_1.IsMongoId(),
+    (0, class_validator_1.IsMongoId)(),
     __metadata("design:type", String)
 ], ParamsWithId.prototype, "id", void 0);
 exports.default = ParamsWithId;

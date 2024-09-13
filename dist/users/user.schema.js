@@ -17,29 +17,29 @@ const flights_schema_1 = require("../flights/flights.schema");
 let User = class User {
 };
 __decorate([
-    class_transformer_1.Transform(({ value }) => value.toString()),
+    (0, class_transformer_1.Transform)(({ value }) => value.toString()),
     __metadata("design:type", Object)
 ], User.prototype, "_id", void 0);
 __decorate([
-    mongoose_1.Prop({ unique: true }),
+    (0, mongoose_1.Prop)({ unique: true }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
-    mongoose_1.Prop(),
+    (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], User.prototype, "userName", void 0);
 __decorate([
-    mongoose_1.Prop(),
-    class_transformer_1.Exclude(),
+    (0, mongoose_1.Prop)(),
+    (0, class_transformer_1.Exclude)(),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    mongoose_1.Prop({ type: address_schema_1.AddressSchema }),
-    class_transformer_1.Type(() => address_schema_1.Address),
+    (0, mongoose_1.Prop)({ type: address_schema_1.AddressSchema }),
+    (0, class_transformer_1.Type)(() => address_schema_1.Address),
     __metadata("design:type", address_schema_1.Address)
 ], User.prototype, "address", void 0);
 __decorate([
-    mongoose_1.Prop({
+    (0, mongoose_1.Prop)({
         get: (creditCardNumber) => {
             if (!creditCardNumber) {
                 return;
@@ -51,11 +51,11 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "creditCardNumber", void 0);
 __decorate([
-    class_transformer_1.Type(() => flights_schema_1.Post),
+    (0, class_transformer_1.Type)(() => flights_schema_1.Post),
     __metadata("design:type", Array)
 ], User.prototype, "posts", void 0);
 User = __decorate([
-    mongoose_1.Schema({
+    (0, mongoose_1.Schema)({
         toJSON: {
             getters: true,
             virtuals: true,

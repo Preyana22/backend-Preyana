@@ -19,7 +19,7 @@ const jwt_strategy_1 = require("./jwt.strategy");
 let AuthenticationModule = class AuthenticationModule {
 };
 AuthenticationModule = __decorate([
-    common_1.Module({
+    (0, common_1.Module)({
         imports: [
             users_module_1.UsersModule,
             passport_1.PassportModule,

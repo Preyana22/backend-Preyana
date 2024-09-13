@@ -14,13 +14,13 @@ const class_validator_1 = require("class-validator");
 class PostDto {
 }
 __decorate([
-    class_validator_1.IsString(),
-    class_validator_1.IsNotEmpty(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Array)
 ], PostDto.prototype, "slices", void 0);
 __decorate([
-    class_validator_1.IsString(),
-    class_validator_1.IsNotEmpty(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], PostDto.prototype, "cabin_class", void 0);
 exports.PostDto = PostDto;

@@ -15,22 +15,22 @@ const class_transformer_1 = require("class-transformer");
 class PaginationParams {
 }
 __decorate([
-    class_validator_1.IsOptional(),
-    class_validator_1.IsMongoId(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsMongoId)(),
     __metadata("design:type", String)
 ], PaginationParams.prototype, "startId", void 0);
 __decorate([
-    class_validator_1.IsOptional(),
-    class_transformer_1.Type(() => Number),
-    class_validator_1.IsNumber(),
-    class_validator_1.Min(0),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_transformer_1.Type)(() => Number),
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.Min)(0),
     __metadata("design:type", Number)
 ], PaginationParams.prototype, "skip", void 0);
 __decorate([
-    class_validator_1.IsOptional(),
-    class_transformer_1.Type(() => Number),
-    class_validator_1.IsNumber(),
-    class_validator_1.Min(1),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_transformer_1.Type)(() => Number),
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.Min)(1),
     __metadata("design:type", Number)
 ], PaginationParams.prototype, "limit", void 0);
 exports.PaginationParams = PaginationParams;

@@ -1,6 +1,6 @@
 import { Document, ObjectId } from 'mongoose';
 import * as mongoose from 'mongoose';
-export declare type PostDocument = Post & Document;
+export type PostDocument = Post & Document;
 export declare class Post {
     static IATAcode(IATAcode: any): (target: typeof import("./flights.service").default, propertyKey: undefined, parameterIndex: 0) => void;
     _id: ObjectId;

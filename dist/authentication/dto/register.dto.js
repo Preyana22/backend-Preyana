@@ -14,18 +14,18 @@ const class_validator_1 = require("class-validator");
 class RegisterDto {
 }
 __decorate([
-    class_validator_1.IsEmail(),
+    (0, class_validator_1.IsEmail)(),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "email", void 0);
 __decorate([
-    class_validator_1.IsString(),
-    class_validator_1.IsNotEmpty(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "userName", void 0);
 __decorate([
-    class_validator_1.IsString(),
-    class_validator_1.IsNotEmpty(),
-    class_validator_1.MinLength(7),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.MinLength)(7),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "password", void 0);
 exports.RegisterDto = RegisterDto;

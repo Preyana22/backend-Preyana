@@ -10,7 +10,7 @@ const common_1 = require("@nestjs/common");
 let PostsService = class PostsService {
 };
 PostsService = __decorate([
-    common_1.Injectable()
+    (0, common_1.Injectable)()
 ], PostsService);
 exports.default = PostsService;
 //# sourceMappingURL=flights.service.js.map

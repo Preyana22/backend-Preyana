@@ -1,5 +1,5 @@
 import { Document } from 'mongoose';
-export declare type AddressDocument = Address & Document;
+export type AddressDocument = Address & Document;
 export declare class Address {
     _id: string;
     city: string;

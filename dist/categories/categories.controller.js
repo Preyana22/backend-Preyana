@@ -40,46 +40,46 @@ let CategoriesController = class CategoriesController {
     }
 };
 __decorate([
-    common_1.Get(),
+    (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], CategoriesController.prototype, "getAllCategories", null);
 __decorate([
-    common_1.Get(':id'),
-    __param(0, common_1.Param()),
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [paramsWithId_1.default]),
     __metadata("design:returntype", Promise)
 ], CategoriesController.prototype, "getCategory", null);
 __decorate([
-    common_1.Post(),
-    common_1.UseGuards(jwt_authentication_guard_1.default),
-    __param(0, common_1.Body()),
-    __param(1, common_1.Req()),
+    (0, common_1.Post)(),
+    (0, common_1.UseGuards)(jwt_authentication_guard_1.default),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [category_dto_1.default, Object]),
     __metadata("design:returntype", Promise)
 ], CategoriesController.prototype, "createCategory", null);
 __decorate([
-    common_1.Delete(':id'),
-    __param(0, common_1.Param()),
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [paramsWithId_1.default]),
     __metadata("design:returntype", Promise)
 ], CategoriesController.prototype, "deleteCategory", null);
 __decorate([
-    common_1.Put(':id'),
-    __param(0, common_1.Param()),
-    __param(1, common_1.Body()),
+    (0, common_1.Put)(':id'),
+    __param(0, (0, common_1.Param)()),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [paramsWithId_1.default,
         category_dto_1.default]),
     __metadata("design:returntype", Promise)
 ], CategoriesController.prototype, "updateCategory", null);
 CategoriesController = __decorate([
-    common_1.Controller('categories'),
-    common_1.UseInterceptors(mongooseClassSerializer_interceptor_1.default(category_schema_1.Category)),
+    (0, common_1.Controller)('categories'),
+    (0, common_1.UseInterceptors)((0, mongooseClassSerializer_interceptor_1.default)(category_schema_1.Category)),
     __metadata("design:paramtypes", [categories_service_1.default])
 ], CategoriesController);
 exports.default = CategoriesController;
