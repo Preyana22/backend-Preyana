@@ -9,7 +9,11 @@ async function bootstrap() {
   app.use(cookieParser());
   app.use(
     cors({
-      origin: ["http://localhost:3001", "http://52.14.78.149"],
+      origin: [
+        "http://localhost:3001",
+        "http://52.14.78.149",
+        "http://192.168.1.158:3001",
+      ],
       optionsSuccessStatus: 200,
     })
   );

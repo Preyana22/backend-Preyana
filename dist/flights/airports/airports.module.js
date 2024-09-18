@@ -6,23 +6,22 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.AirportsModule = void 0;
 const common_1 = require("@nestjs/common");
+const airports_service_1 = require("./airports.service");
+const airports_controller_1 = require("./airports.controller");
+const airports_schema_1 = require("./schemas/airports.schema");
 const mongoose_1 = require("@nestjs/mongoose");
-const flights_controller_1 = require("./flights.controller");
-const flights_service_1 = require("./flights.service");
-const flights_schema_1 = require("./flights.schema");
-const airports_module_1 = require("./airports/airports.module");
-let PostsModule = class PostsModule {
+let AirportsModule = class AirportsModule {
 };
-PostsModule = __decorate([
+AirportsModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            mongoose_1.MongooseModule.forFeature([{ name: flights_schema_1.Post.name, schema: flights_schema_1.PostSchema }]),
-            airports_module_1.AirportsModule,
+            mongoose_1.MongooseModule.forFeature([{ name: airports_schema_1.Airport.name, schema: airports_schema_1.AirportSchema }]),
         ],
-        controllers: [flights_controller_1.default],
-        providers: [flights_service_1.default],
+        providers: [airports_service_1.AirportsService],
+        controllers: [airports_controller_1.AirportsController],
     })
-], PostsModule);
-exports.default = PostsModule;
-//# sourceMappingURL=flights.module.js.map
+], AirportsModule);
+exports.AirportsModule = AirportsModule;
+//# sourceMappingURL=airports.module.js.map

@@ -92,7 +92,7 @@ export class BookingController {
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization:
-        "Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
+        "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
     };
 
     const getOrder = await fetch(
@@ -120,7 +120,7 @@ export class BookingController {
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization:
-        "Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
+        "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
     };
 
     const getOrderCancel = await fetch(
@@ -145,7 +145,7 @@ export class BookingController {
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization:
-        "Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
+        "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
     };
 
     const getOrderCancelConfirm = await fetch(

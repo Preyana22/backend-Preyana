@@ -1,12 +1,12 @@
-import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import PostsModule from './flights/flights.module';
-import * as Joi from '@hapi/joi';
-import { AuthenticationModule } from './authentication/authentication.module';
-import { BookingModule } from './booking/booking.module';
-import CategoriesModule from './categories/categories.module';
-
+import { Module } from "@nestjs/common";
+import { MongooseModule } from "@nestjs/mongoose";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import PostsModule from "./flights/flights.module";
+import * as Joi from "@hapi/joi";
+import { AuthenticationModule } from "./authentication/authentication.module";
+import { BookingModule } from "./booking/booking.module";
+import CategoriesModule from "./categories/categories.module";
+import { AirportsModule } from "./flights/airports/airports.module";
 
 @Module({
   imports: [
@@ -21,14 +21,14 @@ import CategoriesModule from './categories/categories.module';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
-       // const username = configService.get('MONGO_USERNAME');
-       // const password = configService.get('MONGO_PASSWORD');
-       // const database = 'admin';
-       // const host = '127.0.0.1' || configService.get('MONGO_HOST');
+        // const username = configService.get('MONGO_USERNAME');
+        // const password = configService.get('MONGO_PASSWORD');
+        // const database = 'admin';
+        // const host = '127.0.0.1' || configService.get('MONGO_HOST');
 
         return {
           uri: `mongodb://127.0.0.1:27017/`,
-          dbName: 'admin',
+          dbName: "admin",
         };
       },
       inject: [ConfigService],
@@ -37,7 +37,7 @@ import CategoriesModule from './categories/categories.module';
     AuthenticationModule,
     CategoriesModule,
     BookingModule,
-
+    AirportsModule,
   ],
   controllers: [],
   providers: [],

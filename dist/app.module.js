@@ -15,6 +15,7 @@ const Joi = require("@hapi/joi");
 const authentication_module_1 = require("./authentication/authentication.module");
 const booking_module_1 = require("./booking/booking.module");
 const categories_module_1 = require("./categories/categories.module");
+const airports_module_1 = require("./flights/airports/airports.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -33,7 +34,7 @@ AppModule = __decorate([
                 useFactory: async (configService) => {
                     return {
                         uri: `mongodb://127.0.0.1:27017/`,
-                        dbName: 'admin',
+                        dbName: "admin",
                     };
                 },
                 inject: [config_1.ConfigService],
@@ -42,6 +43,7 @@ AppModule = __decorate([
             authentication_module_1.AuthenticationModule,
             categories_module_1.default,
             booking_module_1.BookingModule,
+            airports_module_1.AirportsModule,
         ],
         controllers: [],
         providers: [],
