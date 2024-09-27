@@ -21,10 +21,10 @@ import { AirportsModule } from "./flights/airports/airports.module";
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
-        // const username = configService.get('MONGO_USERNAME');
-        // const password = configService.get('MONGO_PASSWORD');
-        // const database = 'admin';
-        // const host = '127.0.0.1' || configService.get('MONGO_HOST');
+        // const username = configService.get("MONGO_USERNAME");
+        // const password = configService.get("MONGO_PASSWORD");
+        // const database = "admin";
+        // const host = "127.0.0.1" || configService.get("MONGO_HOST");
 
         return {
           uri: `mongodb://127.0.0.1:27017/`,
