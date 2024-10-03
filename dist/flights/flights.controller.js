@@ -22,13 +22,13 @@ let PostsController = class PostsController {
     constructor(PostsService) {
         this.PostsService = PostsService;
     }
-    async getFlight() {
+    async getFlight(searchQuery) {
         let Result = [];
         const duffelHeaders = {
             "Duffel-Version": "v1",
             Authorization: "Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
         };
-        const getAirports = await fetch("https://api.duffel.com/air/airports", {
+        const getAirports = await fetch("https://api.duffel.com/places/suggestions?query=" + searchQuery, {
             method: "GET",
             headers: duffelHeaders,
         });
@@ -166,9 +166,10 @@ let PostsController = class PostsController {
     }
 };
 __decorate([
-    (0, common_1.Get)("airports"),
+    (0, common_1.Get)("airports/:searchQuery"),
+    __param(0, (0, common_1.Param)("searchQuery")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], PostsController.prototype, "getFlight", null);
 __decorate([

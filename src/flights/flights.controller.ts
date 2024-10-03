@@ -27,18 +27,21 @@ import { date } from "@hapi/joi";
 export default class PostsController {
   constructor(private readonly PostsService: PostsService) {}
 
-  @Get("airports")
-  async getFlight() {
+  @Get("airports/:searchQuery")
+  async getFlight(@Param("searchQuery") searchQuery: string) {
     let Result = [];
     const duffelHeaders = {
       "Duffel-Version": "v1",
       Authorization:
         "Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
     };
-    const getAirports = await fetch("https://api.duffel.com/air/airports", {
-      method: "GET",
-      headers: duffelHeaders,
-    });
+    const getAirports = await fetch(
+      "https://api.duffel.com/places/suggestions?query=" + searchQuery,
+      {
+        method: "GET",
+        headers: duffelHeaders,
+      }
+    );
 
     return getAirports.text();
   }
