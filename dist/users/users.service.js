@@ -85,6 +85,19 @@ let UsersService = class UsersService {
             session.endSession();
         }
     }
+    async updatePassword(email, password) {
+        try {
+            const user = await this.getByEmail(email);
+            if (!user) {
+                return null;
+            }
+            return await this.userModel.updateOne({ _id: user._id }, { $set: { password: password } });
+        }
+        catch (error) {
+            console.error("Error in updatePassword:", error);
+            throw new Error("Failed to update user password.");
+        }
+    }
 };
 UsersService = __decorate([
     (0, common_1.Injectable)(),

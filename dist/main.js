@@ -12,6 +12,7 @@ async function bootstrap() {
     app.use((0, cors_ts_1.default)({
         origin: [
             "http://localhost:3001",
+            "http://localhost:3002",
             "http://52.14.78.149",
             "http://192.168.1.92:3001",
             "http://preyana.com",

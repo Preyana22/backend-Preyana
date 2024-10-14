@@ -1,8 +1,13 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { UserDocument, User } from "./user.schema";
 import CreateUserDto from "./dto/createUser.dto";
+import * as bcrypt from "bcrypt";
 
 import { InjectConnection } from "@nestjs/mongoose";
 import * as mongoose from "mongoose";
@@ -87,6 +92,26 @@ class UsersService {
       throw error;
     } finally {
       session.endSession();
+    }
+  }
+
+  async updatePassword(email: string, password: string) {
+    try {
+      const user = await this.getByEmail(email);
+
+      if (!user) {
+        return null; // user not found
+      }
+
+      // Update only the password field using `updateOne` or `findOneAndUpdate`
+      return await this.userModel.updateOne(
+        { _id: user._id }, // Match the user by ID or email
+        { $set: { password: password } } // Set the new password
+      );
+    } catch (error) {
+      // Log or handle error if ObjectId conversion fails or other errors occur
+      console.error("Error in updatePassword:", error);
+      throw new Error("Failed to update user password.");
     }
   }
 }

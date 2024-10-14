@@ -46,6 +46,30 @@ __decorate([
     __metadata("design:type", String)
 ], Booking.prototype, "status", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], Booking.prototype, "address1", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], Booking.prototype, "address2", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], Booking.prototype, "city", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], Booking.prototype, "region", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], Booking.prototype, "postal", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], Booking.prototype, "country", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ required: false, default: () => new Date() }),
     __metadata("design:type", Date)
 ], Booking.prototype, "createdOn", void 0);

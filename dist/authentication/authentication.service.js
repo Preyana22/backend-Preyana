@@ -16,11 +16,13 @@ const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
 const mongoError_enum_1 = require("../utils/mongoError.enum");
 const users_service_1 = require("../users/users.service");
+const email_service_1 = require("../users/email.service");
 let AuthenticationService = class AuthenticationService {
-    constructor(usersService, jwtService, configService) {
+    constructor(usersService, jwtService, configService, emailService) {
         this.usersService = usersService;
         this.jwtService = jwtService;
         this.configService = configService;
+        this.emailService = emailService;
     }
     async register(registrationData) {
         const hashedPassword = await bcrypt.hash(registrationData.password, 10);
@@ -29,15 +31,15 @@ let AuthenticationService = class AuthenticationService {
         }
         catch (error) {
             if ((error === null || error === void 0 ? void 0 : error.code) === mongoError_enum_1.default.DuplicateKey) {
-                throw new common_1.HttpException('User with that email already exists', common_1.HttpStatus.BAD_REQUEST);
+                throw new common_1.HttpException("User with that email already exists", common_1.HttpStatus.BAD_REQUEST);
             }
-            throw new common_1.HttpException('Something went wrong', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new common_1.HttpException("Something went wrong", common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     getCookieWithJwtToken(userId) {
         const payload = { userId };
         const token = this.jwtService.sign(payload);
-        return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get('JWT_EXPIRATION_TIME')}`;
+        return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get("JWT_EXPIRATION_TIME")}`;
     }
     getCookieForLogOut() {
         return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
@@ -49,21 +51,69 @@ let AuthenticationService = class AuthenticationService {
             return user;
         }
         catch (error) {
-            throw new common_1.HttpException('Wrong credentials provided', common_1.HttpStatus.BAD_REQUEST);
+            throw new common_1.HttpException("Wrong credentials provided", common_1.HttpStatus.BAD_REQUEST);
         }
     }
     async verifyPassword(plainTextPassword, hashedPassword) {
         const isPasswordMatching = await bcrypt.compare(plainTextPassword, hashedPassword);
         if (!isPasswordMatching) {
-            throw new common_1.HttpException('Wrong credentials provided', common_1.HttpStatus.BAD_REQUEST);
+            throw new common_1.HttpException("Wrong credentials provided", common_1.HttpStatus.BAD_REQUEST);
         }
+    }
+    generateTemporaryPassword() {
+        const length = 12;
+        const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let password = "";
+        for (let i = 0, n = charset.length; i < length; ++i) {
+            password += charset.charAt(Math.floor(Math.random() * n));
+        }
+        return password;
+    }
+    async requestPasswordReset(email) {
+        const user = await this.usersService.getByEmail(email);
+        if (!user) {
+            throw new Error("User not found");
+        }
+        const tempPassword = this.generateTemporaryPassword();
+        try {
+            await this.emailService.sendResetMail(user.email, "Password Reset Request", `Your temporary password is: ${tempPassword}. Please use it to log in and reset your password.`);
+            const hashedPassword = await bcrypt.hash(tempPassword, 10);
+            user.password = hashedPassword;
+            await this.usersService.updatePassword(email, user.password);
+            console.log("Password reset email sent and password updated successfully.");
+            return {
+                message: "Password reset email sent and password updated successfully.",
+            };
+        }
+        catch (error) {
+            console.error("Error sending reset password email or updating password:", error);
+            if (error.response && error.response.includes("550-5.4.5")) {
+                throw new Error("Failed to send reset password email due to sending limit exceeded.");
+            }
+            throw new Error("Failed to send reset password email or update the password.");
+        }
+    }
+    async changePassword(userId, currentPassword, newPassword) {
+        const user = await this.usersService.getById(userId);
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        if (isMatch) {
+            console.log("Password matches");
+        }
+        else {
+            throw new Error("Incorrect current password");
+        }
+        console.log("user", user);
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+        await this.usersService.updatePassword(user.email, user.password);
     }
 };
 AuthenticationService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [users_service_1.default,
         jwt_1.JwtService,
-        config_1.ConfigService])
+        config_1.ConfigService,
+        email_service_1.EmailService])
 ], AuthenticationService);
 exports.AuthenticationService = AuthenticationService;
 //# sourceMappingURL=authentication.service.js.map

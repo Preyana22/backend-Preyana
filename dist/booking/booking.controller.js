@@ -70,7 +70,7 @@ let BookingController = class BookingController {
             "Accept-Encoding": "gzip",
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
+            Authorization: "Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
         };
         const getOrder = await fetch(`https://api.duffel.com/air/orders/${booking_id}`, {
             method: "GET",
@@ -90,7 +90,7 @@ let BookingController = class BookingController {
             "Accept-Encoding": "gzip",
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
+            Authorization: "Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
         };
         const getOrderCancel = await fetch(`https://api.duffel.com/air/order_cancellations`, {
             method: "POST",
@@ -106,7 +106,7 @@ let BookingController = class BookingController {
             "Accept-Encoding": "gzip",
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
+            Authorization: "Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
         };
         const getOrderCancelConfirm = await fetch(`https://api.duffel.com/air/order_cancellations/${cancel_id}/actions/confirm`, {
             method: "POST",
@@ -153,7 +153,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BookingController.prototype, "updateStatus", null);
 __decorate([
-    (0, common_1.Delete)("deletebokking/:id"),
+    (0, common_1.Delete)("deletebooking/:id"),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

@@ -16,6 +16,7 @@ const local_strategy_1 = require("./local.strategy");
 const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
 const jwt_strategy_1 = require("./jwt.strategy");
+const email_service_1 = require("../users/email.service");
 let AuthenticationModule = class AuthenticationModule {
 };
 AuthenticationModule = __decorate([
@@ -28,14 +29,14 @@ AuthenticationModule = __decorate([
                 imports: [config_1.ConfigModule],
                 inject: [config_1.ConfigService],
                 useFactory: async (configService) => ({
-                    secret: configService.get('JWT_SECRET'),
+                    secret: configService.get("JWT_SECRET"),
                     signOptions: {
-                        expiresIn: `${configService.get('JWT_EXPIRATION_TIME')}s`,
+                        expiresIn: `${configService.get("JWT_EXPIRATION_TIME")}s`,
                     },
                 }),
             }),
         ],
-        providers: [authentication_service_1.AuthenticationService, local_strategy_1.LocalStrategy, jwt_strategy_1.JwtStrategy],
+        providers: [authentication_service_1.AuthenticationService, local_strategy_1.LocalStrategy, jwt_strategy_1.JwtStrategy, email_service_1.EmailService],
         controllers: [authentication_controller_1.AuthenticationController],
     })
 ], AuthenticationModule);

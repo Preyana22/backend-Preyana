@@ -9,9 +9,9 @@ export class RegisterDto {
   userName: string;
 
   
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(7)
+  // @IsString()
+  // @IsNotEmpty()
+  // @MinLength(7)
   password: string;
 }
 

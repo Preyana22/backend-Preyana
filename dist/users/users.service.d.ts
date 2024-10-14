@@ -13,5 +13,6 @@ declare class UsersService {
         user: UserDocument;
     }>;
     delete(userId: string): Promise<void>;
+    updatePassword(email: string, password: string): Promise<mongoose.UpdateWriteOpResult | null>;
 }
 export default UsersService;

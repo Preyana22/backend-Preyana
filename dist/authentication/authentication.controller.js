@@ -19,12 +19,40 @@ const register_dto_1 = require("./dto/register.dto");
 const jwt_authentication_guard_1 = require("./jwt-authentication.guard");
 const user_schema_1 = require("../users/user.schema");
 const mongooseClassSerializer_interceptor_1 = require("../utils/mongooseClassSerializer.interceptor");
+const email_service_1 = require("../users/email.service");
 let AuthenticationController = class AuthenticationController {
-    constructor(authenticationService) {
+    constructor(authenticationService, emailService) {
         this.authenticationService = authenticationService;
+        this.emailService = emailService;
     }
     async register(registrationData) {
-        return this.authenticationService.register(registrationData);
+        let password = registrationData.password;
+        if (!password) {
+            password = this.generateRandomPassword();
+            try {
+                await this.emailService.sendPasswordEmail(registrationData.email, password);
+            }
+            catch (error) {
+                console.error("Error sending email:", error.message);
+                throw new common_1.InternalServerErrorException("Failed to send password email. Please try again later.");
+            }
+        }
+        try {
+            return await this.authenticationService.register(Object.assign(Object.assign({}, registrationData), { password }));
+        }
+        catch (error) {
+            console.error("Error during registration:", error.message);
+            throw new common_1.InternalServerErrorException("Failed to register. Please try again later.");
+        }
+    }
+    generateRandomPassword() {
+        const length = 12;
+        const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let password = "";
+        for (let i = 0, n = charset.length; i < length; ++i) {
+            password += charset.charAt(Math.floor(Math.random() * n));
+        }
+        return password;
     }
     async logIn(request) {
         var _a;
@@ -33,26 +61,58 @@ let AuthenticationController = class AuthenticationController {
         const results = this.authenticationService.getAuthenticatedUser(request.body.email, request.body.password);
         console.log("cookies" + JSON.stringify(results));
         const cookie = this.authenticationService.getCookieWithJwtToken(user._id);
-        (_a = request.res) === null || _a === void 0 ? void 0 : _a.setHeader('Set-Cookie', cookie);
+        (_a = request.res) === null || _a === void 0 ? void 0 : _a.setHeader("Set-Cookie", cookie);
         return results;
     }
     async logOut(request) {
         var _a;
-        (_a = request.res) === null || _a === void 0 ? void 0 : _a.setHeader('Set-Cookie', this.authenticationService.getCookieForLogOut());
+        (_a = request.res) === null || _a === void 0 ? void 0 : _a.setHeader("Set-Cookie", this.authenticationService.getCookieForLogOut());
     }
     authenticate(request) {
         return request.user;
     }
+    async forgotPassword(email) {
+        try {
+            await this.authenticationService.requestPasswordReset(email);
+            return {
+                success: true,
+                message: "A temporary password has been sent to your email.",
+            };
+        }
+        catch (error) {
+            console.error("Error in forgotPassword:", error.message);
+            if (error.message === "User not found") {
+                return {
+                    success: false,
+                    message: "No user found with the provided email address.",
+                };
+            }
+            else if (error.message.includes("sending limit exceeded")) {
+                return {
+                    success: false,
+                    message: "Daily email sending limit exceeded. Please try again later.",
+                };
+            }
+            return {
+                success: false,
+                message: "Failed to process the password reset request. Please try again later.",
+            };
+        }
+    }
+    async changePassword(userId, currentPassword, newPassword) {
+        await this.authenticationService.changePassword(userId, currentPassword, newPassword);
+        return { message: "Password has been successfully changed." };
+    }
 };
 __decorate([
-    (0, common_1.Post)('register'),
+    (0, common_1.Post)("register"),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [register_dto_1.default]),
     __metadata("design:returntype", Promise)
 ], AuthenticationController.prototype, "register", null);
 __decorate([
-    (0, common_1.Post)('log-in'),
+    (0, common_1.Post)("log-in"),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -60,7 +120,7 @@ __decorate([
 ], AuthenticationController.prototype, "logIn", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_authentication_guard_1.default),
-    (0, common_1.Post)('log-out'),
+    (0, common_1.Post)("log-out"),
     (0, common_1.HttpCode)(200),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
@@ -74,10 +134,27 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthenticationController.prototype, "authenticate", null);
+__decorate([
+    (0, common_1.Post)("forgot-password"),
+    __param(0, (0, common_1.Body)("email")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AuthenticationController.prototype, "forgotPassword", null);
+__decorate([
+    (0, common_1.Post)("change-password"),
+    __param(0, (0, common_1.Body)("userId")),
+    __param(1, (0, common_1.Body)("currentPassword")),
+    __param(2, (0, common_1.Body)("newPassword")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:returntype", Promise)
+], AuthenticationController.prototype, "changePassword", null);
 AuthenticationController = __decorate([
-    (0, common_1.Controller)('authentication'),
+    (0, common_1.Controller)("authentication"),
     (0, common_1.UseInterceptors)((0, mongooseClassSerializer_interceptor_1.default)(user_schema_1.User)),
-    __metadata("design:paramtypes", [authentication_service_1.AuthenticationService])
+    __metadata("design:paramtypes", [authentication_service_1.AuthenticationService,
+        email_service_1.EmailService])
 ], AuthenticationController);
 exports.AuthenticationController = AuthenticationController;
 //# sourceMappingURL=authentication.controller.js.map
