@@ -3,7 +3,7 @@ export declare class BookingController {
     private readonly bookingService;
     constructor(bookingService: BookingService);
     create(createBookingDto: any): Promise<import("./schemas/booking.schema").Booking>;
-    findAll(user_id: string): Promise<import("./schemas/booking.schema").Booking[] | null>;
+    findAll(email: string): Promise<import("./schemas/booking.schema").Booking[] | null>;
     findOne(id: string): Promise<import("./schemas/booking.schema").Booking | null>;
     update(id: string, updateBookingDto: any): Promise<{
         message: string;

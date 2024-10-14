@@ -23,8 +23,8 @@ let BookingController = class BookingController {
         console.log("createBookingDto", createBookingDto);
         return this.bookingService.create(createBookingDto);
     }
-    async findAll(user_id) {
-        const results = await this.bookingService.findAll(user_id);
+    async findAll(email) {
+        const results = await this.bookingService.findAll(email);
         console.log("Bookings found:", results);
         return results;
     }
@@ -123,8 +123,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BookingController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)("bookings/:user_id"),
-    __param(0, (0, common_1.Param)("user_id")),
+    (0, common_1.Get)("bookings/:email"),
+    __param(0, (0, common_1.Param)("email")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)

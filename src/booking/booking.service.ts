@@ -24,9 +24,9 @@ export class BookingService {
     return createdBooking.save();
   }
 
-  async findAll(userId: string): Promise<Booking[] | null> {
-    console.log("Filtering by user_id:", userId);
-    return this.bookingModel.find({ user_id: userId }).exec();
+  async findAll(email: string): Promise<Booking[] | null> {
+    console.log("Filtering by email:", email);
+    return this.bookingModel.find({ email: email }).exec();
   }
 
   async findById(id: string): Promise<Booking | null> {

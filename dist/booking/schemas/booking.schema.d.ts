@@ -1,10 +1,8 @@
 import { Document } from "mongoose";
 export type BookingDocument = Booking & Document;
 export declare class Booking {
-    userName: string;
     name: string;
     email: string;
-    user_id: string;
     booking_id: string;
     booking_reference: string;
     offer_id: string;

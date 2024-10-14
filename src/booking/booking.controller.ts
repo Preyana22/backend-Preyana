@@ -21,9 +21,9 @@ export class BookingController {
     return this.bookingService.create(createBookingDto);
   }
 
-  @Get("bookings/:user_id")
-  async findAll(@Param("user_id") user_id: string) {
-    const results = await this.bookingService.findAll(user_id);
+  @Get("bookings/:email")
+  async findAll(@Param("email") email: string) {
+    const results = await this.bookingService.findAll(email);
     console.log("Bookings found:", results); // Add this line for debugging
     return results;
   }
