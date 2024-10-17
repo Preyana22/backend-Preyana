@@ -29,7 +29,6 @@ let AuthenticationController = class AuthenticationController {
         let password = registrationData.password;
         if (!password) {
             password = this.generateRandomPassword();
-            console.log("generateRandomPassword" + password);
             try {
                 await this.emailService.sendPasswordEmail(registrationData.email, password);
             }

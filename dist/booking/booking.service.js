@@ -53,12 +53,14 @@ let BookingService = class BookingService {
             .findByIdAndUpdate(id, updateBookingDto, { new: true })
             .exec();
     }
-    async updateStatus(id, userId, status) {
+    async updateStatus(id, bookingId, status) {
         try {
             const objectId = new mongodb_1.ObjectId(id);
+            console.log("objectId" + objectId);
+            console.log("userId" + bookingId);
             const booking = await this.bookingModel.findOne({
                 _id: objectId,
-                user_id: userId,
+                booking_id: bookingId,
             });
             if (!booking) {
                 return null;

@@ -7,6 +7,6 @@ export declare class BookingService {
     findAll(value: string): Promise<Booking[] | null>;
     findById(id: string): Promise<Booking | null>;
     update(id: string, updateBookingDto: any): Promise<Booking | null>;
-    updateStatus(id: string, userId: string, status: string): Promise<BookingDocument | null>;
+    updateStatus(id: string, bookingId: string, status: string): Promise<BookingDocument | null>;
     delete(id: string): Promise<Booking | null>;
 }

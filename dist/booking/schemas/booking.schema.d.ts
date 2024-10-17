@@ -14,6 +14,7 @@ export declare class Booking {
     region: string;
     postal: string;
     country: string;
+    userId: string;
     createdOn: Date;
 }
 export declare const BookingSchema: import("mongoose").Schema<Document<Booking, any, any>, import("mongoose").Model<Document<Booking, any, any>, any, any>, undefined, {}>;

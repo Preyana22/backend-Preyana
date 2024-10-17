@@ -49,21 +49,26 @@ export class BookingController {
   @Put("updatebookingstatus/:id")
   async updateStatus(
     @Param("id") id: string,
-    @Body() updateBookingDto: { user_id: string; status: string }
+    @Body() updateBookingDto: { booking_id: string; status: string }
   ) {
-    const { user_id, status } = updateBookingDto;
+    const { booking_id, status } = updateBookingDto;
 
     // Call the service to update the booking status
-    const result = await this.bookingService.updateStatus(id, user_id, status);
-
+    const result = await this.bookingService.updateStatus(
+      id,
+      booking_id,
+      status
+    );
+    console.log("update status result");
+    console.log(result);
     if (!result) {
       throw new NotFoundException(
-        `Booking with id ${id} and user_id ${user_id} not found`
+        `Booking with id ${id} and booking_id ${booking_id} not found`
       );
     }
 
     return {
-      message: `Booking with id ${id} for user_id ${user_id} has been updated successfully.`,
+      message: `Booking with id ${id} for user_id ${booking_id} has been updated successfully.`,
       errors: null,
     };
   }

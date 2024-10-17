@@ -42,13 +42,15 @@ let BookingController = class BookingController {
         };
     }
     async updateStatus(id, updateBookingDto) {
-        const { user_id, status } = updateBookingDto;
-        const result = await this.bookingService.updateStatus(id, user_id, status);
+        const { booking_id, status } = updateBookingDto;
+        const result = await this.bookingService.updateStatus(id, booking_id, status);
+        console.log("update status result");
+        console.log(result);
         if (!result) {
-            throw new common_1.NotFoundException(`Booking with id ${id} and user_id ${user_id} not found`);
+            throw new common_1.NotFoundException(`Booking with id ${id} and booking_id ${booking_id} not found`);
         }
         return {
-            message: `Booking with id ${id} for user_id ${user_id} has been updated successfully.`,
+            message: `Booking with id ${id} for user_id ${booking_id} has been updated successfully.`,
             errors: null,
         };
     }

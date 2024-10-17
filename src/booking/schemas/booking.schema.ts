@@ -28,14 +28,19 @@ export class Booking {
 
   @Prop({ required: false })
   address1: string;
+
   @Prop({ required: false })
   address2: string;
+
   @Prop({ required: false })
   city: string;
+
   @Prop({ required: false })
   region: string;
+
   @Prop({ required: false })
   postal: string;
+
   @Prop({ required: false })
   country: string;
 

@@ -10,7 +10,7 @@ export declare class BookingController {
         errors: null;
     }>;
     updateStatus(id: string, updateBookingDto: {
-        user_id: string;
+        booking_id: string;
         status: string;
     }): Promise<{
         message: string;

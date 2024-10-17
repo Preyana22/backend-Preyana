@@ -47,15 +47,16 @@ export class BookingService {
       .exec();
   }
 
-  async updateStatus(id: string, userId: string, status: string) {
+  async updateStatus(id: string, bookingId: string, status: string) {
     try {
       // Convert id to ObjectId if needed (if _id is ObjectId in the database)
       const objectId = new ObjectId(id);
-
+      console.log("objectId" + objectId);
+      console.log("userId" + bookingId);
       // Find booking by both _id and user_id
       const booking = await this.bookingModel.findOne({
         _id: objectId, // Ensure _id is an ObjectId
-        user_id: userId, // Assuming user_id is a string
+        booking_id: bookingId, // Assuming user_id is a string
       });
 
       if (!booking) {
