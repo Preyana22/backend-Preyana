@@ -8,6 +8,8 @@ import {
   Delete,
   NotFoundException,
   Query,
+  HttpStatus,
+  HttpException,
 } from "@nestjs/common";
 import { BookingService } from "./booking.service";
 
@@ -17,8 +19,36 @@ export class BookingController {
 
   @Post("createbooking")
   async create(@Body() createBookingDto: any) {
-    console.log("createBookingDto", createBookingDto);
-    return this.bookingService.create(createBookingDto);
+    try {
+      console.log("createBookingDto", createBookingDto);
+      // Call the service to create a booking
+      const booking = await this.bookingService.create(createBookingDto);
+      return {
+        message: "Booking created successfully",
+        booking,
+      };
+    } catch (error: any) {
+      console.error("Error creating booking:", error);
+
+      // Handle specific error types and return appropriate HTTP responses
+      if (error.message.includes("Invalid booking data")) {
+        throw new HttpException(
+          "Invalid booking data. Please check the input.",
+          HttpStatus.BAD_REQUEST
+        );
+      } else if (error.message.includes("Duplicate booking detected")) {
+        throw new HttpException(
+          "A booking with similar details already exists.",
+          HttpStatus.CONFLICT
+        );
+      } else {
+        // Generic error response
+        throw new HttpException(
+          "An unexpected error occurred while creating the booking.",
+          HttpStatus.INTERNAL_SERVER_ERROR
+        );
+      }
+    }
   }
 
   @Get("bookings/:email")

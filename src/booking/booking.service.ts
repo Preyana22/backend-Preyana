@@ -11,17 +11,39 @@ export class BookingService {
   ) {}
 
   async create(createBookingDto: any): Promise<Booking> {
-    const createdBooking = new this.bookingModel(createBookingDto);
-    await createdBooking
-      .populate({
-        path: "bookings",
-        populate: {
-          path: "email",
-        },
-      })
-      .execPopulate();
+    try {
+      const createdBooking = new this.bookingModel(createBookingDto);
 
-    return createdBooking.save();
+      // Populate the related fields
+      await createdBooking
+        .populate({
+          path: "bookings",
+          populate: {
+            path: "email",
+          },
+        })
+        .execPopulate();
+
+      // Save the booking and return the result
+      return await createdBooking.save();
+    } catch (error: any) {
+      // Log the error for debugging purposes
+      console.error("Error creating booking:", error);
+
+      // Handle different types of errors based on the error message or code
+      if (error.name === "ValidationError") {
+        throw new Error("Invalid booking data. Please check the input.");
+      } else if (error.name === "MongoError" && error.code === 11000) {
+        throw new Error(
+          "Duplicate booking detected. A record with similar details already exists."
+        );
+      } else {
+        // Generic error handling
+        throw new Error(
+          "An error occurred while creating the booking. Please try again later."
+        );
+      }
+    }
   }
 
   async findAll(value: string): Promise<Booking[] | null> {
