@@ -12,6 +12,9 @@ export class Booking {
   email: string;
 
   @Prop({ required: true })
+  loginEmail: string;
+
+  @Prop({ required: true })
   booking_id: string;
 
   @Prop({ required: true })

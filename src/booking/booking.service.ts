@@ -24,9 +24,17 @@ export class BookingService {
     return createdBooking.save();
   }
 
-  async findAll(email: string): Promise<Booking[] | null> {
-    console.log("Filtering by email:", email);
-    return this.bookingModel.find({ email: email }).exec();
+  async findAll(value: string): Promise<Booking[] | null> {
+    console.log("Filtering by value:", value);
+    return this.bookingModel
+      .find({
+        $or: [
+          { email: { $regex: value, $options: "i" } },
+          { loginEmail: { $regex: value, $options: "i" } },
+          // Add other fields here if needed
+        ],
+      })
+      .exec();
   }
 
   async findById(id: string): Promise<Booking | null> {

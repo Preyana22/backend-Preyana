@@ -35,6 +35,7 @@ export class AuthenticationController {
       // Generate a random password
       password = this.generateRandomPassword();
 
+      console.log("generateRandomPassword" + password);
       // Try to send the generated password to the user's email
       try {
         await this.emailService.sendPasswordEmail(

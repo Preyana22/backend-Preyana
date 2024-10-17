@@ -34,9 +34,16 @@ let BookingService = class BookingService {
             .execPopulate();
         return createdBooking.save();
     }
-    async findAll(email) {
-        console.log("Filtering by email:", email);
-        return this.bookingModel.find({ email: email }).exec();
+    async findAll(value) {
+        console.log("Filtering by value:", value);
+        return this.bookingModel
+            .find({
+            $or: [
+                { email: { $regex: value, $options: "i" } },
+                { loginEmail: { $regex: value, $options: "i" } },
+            ],
+        })
+            .exec();
     }
     async findById(id) {
         return this.bookingModel.findById(id).exec();

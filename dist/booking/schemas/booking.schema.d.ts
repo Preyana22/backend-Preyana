@@ -3,6 +3,7 @@ export type BookingDocument = Booking & Document;
 export declare class Booking {
     name: string;
     email: string;
+    loginEmail: string;
     booking_id: string;
     booking_reference: string;
     offer_id: string;
