@@ -11,18 +11,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthenticationService = void 0;
 const common_1 = require("@nestjs/common");
-const bcrypt = require("bcrypt");
 const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
 const mongoError_enum_1 = require("../utils/mongoError.enum");
 const users_service_1 = require("../users/users.service");
 const email_service_1 = require("../users/email.service");
+const mailer_1 = require("@nestjs-modules/mailer");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 let AuthenticationService = class AuthenticationService {
-    constructor(usersService, jwtService, configService, emailService) {
+    constructor(usersService, jwtService, configService, emailService, mailerService) {
         this.usersService = usersService;
         this.jwtService = jwtService;
         this.configService = configService;
         this.emailService = emailService;
+        this.mailerService = mailerService;
     }
     async register(registrationData) {
         const hashedPassword = await bcrypt.hash(registrationData.password, 10);
@@ -74,24 +77,18 @@ let AuthenticationService = class AuthenticationService {
         if (!user) {
             throw new Error("User not found");
         }
-        const tempPassword = this.generateTemporaryPassword();
-        try {
-            await this.emailService.sendResetMail(user.email, "Password Reset Request", `Your temporary password is: ${tempPassword}. Please use it to log in and reset your password.`);
-            const hashedPassword = await bcrypt.hash(tempPassword, 10);
-            user.password = hashedPassword;
-            await this.usersService.updatePassword(email, user.password);
-            console.log("Password reset email sent and password updated successfully.");
-            return {
-                message: "Password reset email sent and password updated successfully.",
-            };
-        }
-        catch (error) {
-            console.error("Error sending reset password email or updating password:", error);
-            if (error.response && error.response.includes("550-5.4.5")) {
-                throw new Error("Failed to send reset password email due to sending limit exceeded.");
-            }
-            throw new Error("Failed to send reset password email or update the password.");
-        }
+        const resetToken = jwt.sign({ email }, "your_secret_key", {
+            expiresIn: "1h",
+        });
+        await this.mailerService.sendMail({
+            to: email,
+            subject: "Password Reset",
+            template: "../templates/forgot-password",
+            context: {
+                name: user.email,
+                resetLink: `http://192.168.1.92:3001/reset-password?token=${resetToken}`,
+            },
+        });
     }
     async changePassword(userId, currentPassword, newPassword) {
         const user = await this.usersService.getById(userId);
@@ -113,7 +110,8 @@ AuthenticationService = __decorate([
     __metadata("design:paramtypes", [users_service_1.default,
         jwt_1.JwtService,
         config_1.ConfigService,
-        email_service_1.EmailService])
+        email_service_1.EmailService,
+        mailer_1.MailerService])
 ], AuthenticationService);
 exports.AuthenticationService = AuthenticationService;
 //# sourceMappingURL=authentication.service.js.map

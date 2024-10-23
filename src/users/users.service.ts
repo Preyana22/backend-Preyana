@@ -11,12 +11,12 @@ import * as bcrypt from "bcrypt";
 
 import { InjectConnection } from "@nestjs/mongoose";
 import * as mongoose from "mongoose";
+import RegisterDto from "src/authentication/dto/register.dto";
 
 @Injectable()
 class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-
     @InjectConnection() private readonly connection: mongoose.Connection
   ) {}
 
@@ -113,6 +113,29 @@ class UsersService {
       console.error("Error in updatePassword:", error);
       throw new Error("Failed to update user password.");
     }
+  }
+
+  // Update user method
+  async updateUser(
+    id: string,
+    updateUserDto: RegisterDto
+  ): Promise<User | null> {
+    const user = await this.getById(id);
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+
+    // Update user properties
+    Object.assign(user, updateUserDto);
+
+    return this.update(id, user);
+  }
+
+  async update(id: string, updateBookingDto: any): Promise<User | null> {
+    return this.userModel
+      .findByIdAndUpdate(id, updateBookingDto, { new: true })
+      .exec();
   }
 }
 

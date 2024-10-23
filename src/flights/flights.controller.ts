@@ -199,7 +199,7 @@ export default class PostsController {
 
   @Post("confirm")
   async confirmPayment(@Body() req: any) {
-    console.log("in ts", req);
+    console.log("confirmPayment in ts", req);
 
     const paymentIntent = req.paymentIntent;
     const duffelHeaders = {

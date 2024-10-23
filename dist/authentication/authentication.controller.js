@@ -20,15 +20,18 @@ const jwt_authentication_guard_1 = require("./jwt-authentication.guard");
 const user_schema_1 = require("../users/user.schema");
 const mongooseClassSerializer_interceptor_1 = require("../utils/mongooseClassSerializer.interceptor");
 const email_service_1 = require("../users/email.service");
+const users_service_1 = require("../users/users.service");
 let AuthenticationController = class AuthenticationController {
-    constructor(authenticationService, emailService) {
+    constructor(authenticationService, emailService, userService) {
         this.authenticationService = authenticationService;
         this.emailService = emailService;
+        this.userService = userService;
     }
     async register(registrationData) {
         let password = registrationData.password;
         if (!password) {
             password = this.generateRandomPassword();
+            console.log("password " + password);
             try {
                 await this.emailService.sendPasswordEmail(registrationData.email, password);
             }
@@ -103,6 +106,15 @@ let AuthenticationController = class AuthenticationController {
         await this.authenticationService.changePassword(userId, currentPassword, newPassword);
         return { message: "Password has been successfully changed." };
     }
+    async getUserById(id) {
+        try {
+            const user = await this.userService.getById(id);
+            return user;
+        }
+        catch (error) {
+            throw new common_1.NotFoundException("User not found");
+        }
+    }
 };
 __decorate([
     (0, common_1.Post)("register"),
@@ -150,11 +162,19 @@ __decorate([
     __metadata("design:paramtypes", [String, String, String]),
     __metadata("design:returntype", Promise)
 ], AuthenticationController.prototype, "changePassword", null);
+__decorate([
+    (0, common_1.Get)("profile/:id"),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AuthenticationController.prototype, "getUserById", null);
 AuthenticationController = __decorate([
     (0, common_1.Controller)("authentication"),
     (0, common_1.UseInterceptors)((0, mongooseClassSerializer_interceptor_1.default)(user_schema_1.User)),
     __metadata("design:paramtypes", [authentication_service_1.AuthenticationService,
-        email_service_1.EmailService])
+        email_service_1.EmailService,
+        users_service_1.default])
 ], AuthenticationController);
 exports.AuthenticationController = AuthenticationController;
 //# sourceMappingURL=authentication.controller.js.map

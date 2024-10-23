@@ -66,10 +66,6 @@ __decorate([
     __metadata("design:type", String)
 ], Booking.prototype, "country", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: false }),
-    __metadata("design:type", String)
-], Booking.prototype, "userId", void 0);
-__decorate([
     (0, mongoose_1.Prop)({ required: false, default: () => new Date() }),
     __metadata("design:type", Date)
 ], Booking.prototype, "createdOn", void 0);

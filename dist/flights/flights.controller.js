@@ -144,7 +144,7 @@ let PostsController = class PostsController {
         };
     }
     async confirmPayment(req) {
-        console.log("in ts", req);
+        console.log("confirmPayment in ts", req);
         const paymentIntent = req.paymentIntent;
         const duffelHeaders = {
             "Duffel-Version": "v1",

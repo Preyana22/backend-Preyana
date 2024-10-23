@@ -8,6 +8,9 @@ import {
   Get,
   UseInterceptors,
   InternalServerErrorException,
+  Param,
+  NotFoundException,
+  Put,
 } from "@nestjs/common";
 import { AuthenticationService } from "./authentication.service";
 import RegisterDto from "./dto/register.dto";
@@ -17,13 +20,15 @@ import JwtAuthenticationGuard from "./jwt-authentication.guard";
 import { User } from "../users/user.schema";
 import MongooseClassSerializerInterceptor from "../utils/mongooseClassSerializer.interceptor";
 import { EmailService } from "src/users/email.service";
+import UsersService from "src/users/users.service";
 
 @Controller("authentication")
 @UseInterceptors(MongooseClassSerializerInterceptor(User))
 export class AuthenticationController {
   constructor(
     private readonly authenticationService: AuthenticationService,
-    private readonly emailService: EmailService
+    private readonly emailService: EmailService,
+    private readonly userService: UsersService
   ) {}
 
   @Post("register")
@@ -34,7 +39,7 @@ export class AuthenticationController {
     if (!password) {
       // Generate a random password
       password = this.generateRandomPassword();
-
+      console.log("password " + password);
       // Try to send the generated password to the user's email
       try {
         await this.emailService.sendPasswordEmail(
@@ -156,5 +161,24 @@ export class AuthenticationController {
       newPassword
     );
     return { message: "Password has been successfully changed." };
+  }
+
+  @Get("profile/:id")
+  async getUserById(@Param("id") id: string) {
+    try {
+      const user = await this.userService.getById(id);
+      return user;
+    } catch (error) {
+      throw new NotFoundException("User not found");
+    }
+  }
+
+  // Update user endpoint
+  @Put("profileUpdate:id")
+  async updateUser(
+    @Param("id") id: string,
+    @Body() updateUserDto: RegisterDto
+  ): Promise<User | null> {
+    return this.userService.updateUser(id, updateUserDto);
   }
 }

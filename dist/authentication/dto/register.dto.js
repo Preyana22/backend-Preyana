@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RegisterDto = void 0;
+const mongoose_1 = require("@nestjs/mongoose");
 const class_validator_1 = require("class-validator");
 class RegisterDto {
 }
@@ -22,6 +23,38 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "userName", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], RegisterDto.prototype, "name", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false, default: () => new Date() }),
+    __metadata("design:type", Date)
+], RegisterDto.prototype, "birthDate", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], RegisterDto.prototype, "gender", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], RegisterDto.prototype, "phoneNo", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], RegisterDto.prototype, "address", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false, default: () => new Date() }),
+    __metadata("design:type", String)
+], RegisterDto.prototype, "nameOnCard", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], RegisterDto.prototype, "billingAddress", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false, default: () => new Date() }),
+    __metadata("design:type", Date)
+], RegisterDto.prototype, "expirationDate", void 0);
 exports.RegisterDto = RegisterDto;
 exports.default = RegisterDto;
 //# sourceMappingURL=register.dto.js.map

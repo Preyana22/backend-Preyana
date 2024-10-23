@@ -17,6 +17,9 @@ const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
 const jwt_strategy_1 = require("./jwt.strategy");
 const email_service_1 = require("../users/email.service");
+const mailer_1 = require("@nestjs-modules/mailer");
+const handlebars_adapter_1 = require("@nestjs-modules/mailer/dist/adapters/handlebars.adapter");
+const path = require("path");
 let AuthenticationModule = class AuthenticationModule {
 };
 AuthenticationModule = __decorate([
@@ -34,6 +37,27 @@ AuthenticationModule = __decorate([
                         expiresIn: `${configService.get("JWT_EXPIRATION_TIME")}s`,
                     },
                 }),
+            }),
+            mailer_1.MailerModule.forRoot({
+                transport: {
+                    host: "smtp.gmail.com",
+                    port: 587,
+                    secure: false,
+                    auth: {
+                        user: "bsskk2022@gmail.com",
+                        pass: "vggtkmvrrddxshdc",
+                    },
+                },
+                defaults: {
+                    from: '"No Reply" <no-reply@example.com>',
+                },
+                template: {
+                    dir: path.join(process.cwd(), "src", "templates"),
+                    adapter: new handlebars_adapter_1.HandlebarsAdapter(),
+                    options: {
+                        strict: true,
+                    },
+                },
             }),
         ],
         providers: [authentication_service_1.AuthenticationService, local_strategy_1.LocalStrategy, jwt_strategy_1.JwtStrategy, email_service_1.EmailService],

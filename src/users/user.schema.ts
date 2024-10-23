@@ -1,8 +1,8 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId } from 'mongoose';
-import { Exclude, Transform, Type } from 'class-transformer';
-import { Address, AddressSchema } from './address.schema';
-import { Post } from '../flights/flights.schema';
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Document, ObjectId } from "mongoose";
+import { Exclude, Transform, Type } from "class-transformer";
+import { Address, AddressSchema } from "./address.schema";
+import { Post } from "../flights/flights.schema";
 
 export type UserDocument = User & Document;
 
@@ -22,8 +22,6 @@ export class User {
   @Prop()
   userName: string;
 
- 
-
   fullName: string;
 
   @Prop()
@@ -34,13 +32,34 @@ export class User {
   @Type(() => Address)
   address: Address;
 
+  @Prop({ required: false })
+  name: string;
+
+  @Prop({ required: false, default: () => new Date() })
+  birthDate: Date;
+
+  @Prop({ required: false })
+  gender: string;
+
+  @Prop({ required: false })
+  phoneNo: string;
+
+  @Prop({ required: false, default: () => new Date() })
+  nameOnCard: string;
+
+  @Prop({ required: false })
+  billingAddress: string;
+
+  @Prop({ required: false, default: () => new Date() })
+  expirationDate: Date;
+
   @Prop({
     get: (creditCardNumber: string) => {
       if (!creditCardNumber) {
         return;
       }
       const lastFourDigits = creditCardNumber.slice(
-        creditCardNumber.length - 4,
+        creditCardNumber.length - 4
       );
       return `****-****-****-${lastFourDigits}`;
     },
@@ -53,16 +72,16 @@ export class User {
 
 const UserSchema = SchemaFactory.createForClass(User);
 
-UserSchema.index({ userName: 'text'});
+UserSchema.index({ userName: "text" });
 
-UserSchema.virtual('fullName').get(function (this: User) {
+UserSchema.virtual("fullName").get(function (this: User) {
   return `${this.userName}`;
 });
 
-UserSchema.virtual('posts', {
-  ref: 'Post',
-  localField: '_id',
-  foreignField: 'author',
+UserSchema.virtual("posts", {
+  ref: "Post",
+  localField: "_id",
+  foreignField: "author",
 });
 
 export { UserSchema };

@@ -20,8 +20,27 @@ let BookingController = class BookingController {
         this.bookingService = bookingService;
     }
     async create(createBookingDto) {
-        console.log("createBookingDto", createBookingDto);
-        return this.bookingService.create(createBookingDto);
+        console.log("createbooking", createBookingDto);
+        try {
+            console.log("createBookingDto", createBookingDto);
+            const booking = await this.bookingService.create(createBookingDto);
+            return {
+                message: "Booking created successfully",
+                booking,
+            };
+        }
+        catch (error) {
+            console.error("Error creating booking:", error);
+            if (error.message.includes("Invalid booking data")) {
+                throw new common_1.HttpException("Invalid booking data. Please check the input.", common_1.HttpStatus.BAD_REQUEST);
+            }
+            else if (error.message.includes("Duplicate booking detected")) {
+                throw new common_1.HttpException("A booking with similar details already exists.", common_1.HttpStatus.CONFLICT);
+            }
+            else {
+                throw new common_1.HttpException("An unexpected error occurred while creating the booking.", common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
     }
     async findAll(email) {
         const results = await this.bookingService.findAll(email);

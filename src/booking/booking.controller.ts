@@ -19,6 +19,7 @@ export class BookingController {
 
   @Post("createbooking")
   async create(@Body() createBookingDto: any) {
+    console.log("createbooking", createBookingDto);
     try {
       console.log("createBookingDto", createBookingDto);
       // Call the service to create a booking
