@@ -28,9 +28,8 @@ export class User {
   @Exclude()
   password: string;
 
-  @Prop({ type: AddressSchema })
-  @Type(() => Address)
-  address: Address;
+  @Prop({ required: false })
+  address: string;
 
   @Prop({ required: false })
   name: string;

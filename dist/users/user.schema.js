@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserSchema = exports.User = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const class_transformer_1 = require("class-transformer");
-const address_schema_1 = require("./address.schema");
 const flights_schema_1 = require("../flights/flights.schema");
 let User = class User {
 };
@@ -34,10 +33,37 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ type: address_schema_1.AddressSchema }),
-    (0, class_transformer_1.Type)(() => address_schema_1.Address),
-    __metadata("design:type", address_schema_1.Address)
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
 ], User.prototype, "address", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], User.prototype, "name", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false, default: () => new Date() }),
+    __metadata("design:type", Date)
+], User.prototype, "birthDate", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], User.prototype, "gender", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], User.prototype, "phoneNo", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false, default: () => new Date() }),
+    __metadata("design:type", String)
+], User.prototype, "nameOnCard", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], User.prototype, "billingAddress", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false, default: () => new Date() }),
+    __metadata("design:type", Date)
+], User.prototype, "expirationDate", void 0);
 __decorate([
     (0, mongoose_1.Prop)({
         get: (creditCardNumber) => {
@@ -65,13 +91,13 @@ User = __decorate([
 exports.User = User;
 const UserSchema = mongoose_1.SchemaFactory.createForClass(User);
 exports.UserSchema = UserSchema;
-UserSchema.index({ userName: 'text' });
-UserSchema.virtual('fullName').get(function () {
+UserSchema.index({ userName: "text" });
+UserSchema.virtual("fullName").get(function () {
     return `${this.userName}`;
 });
-UserSchema.virtual('posts', {
-    ref: 'Post',
-    localField: '_id',
-    foreignField: 'author',
+UserSchema.virtual("posts", {
+    ref: "Post",
+    localField: "_id",
+    foreignField: "author",
 });
 //# sourceMappingURL=user.schema.js.map

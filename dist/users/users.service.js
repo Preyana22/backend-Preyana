@@ -98,6 +98,20 @@ let UsersService = class UsersService {
             throw new Error("Failed to update user password.");
         }
     }
+    async updateUser(id, updateUserDto) {
+        console.log("updateUserDto", updateUserDto);
+        const user = await this.getById(id);
+        if (!user) {
+            throw new common_1.NotFoundException(`User with ID ${id} not found`);
+        }
+        Object.assign(user, updateUserDto);
+        return this.update(id, user);
+    }
+    async update(id, updateBookingDto) {
+        return this.userModel
+            .findByIdAndUpdate(id, updateBookingDto, { new: true })
+            .exec();
+    }
 };
 UsersService = __decorate([
     (0, common_1.Injectable)(),

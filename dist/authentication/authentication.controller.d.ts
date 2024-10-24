@@ -1,6 +1,7 @@
 import { AuthenticationService } from "./authentication.service";
 import RegisterDto from "./dto/register.dto";
 import RequestWithUser from "./requestWithUser.interface";
+import { User } from "../users/user.schema";
 import { EmailService } from "src/users/email.service";
 import UsersService from "src/users/users.service";
 export declare class AuthenticationController {
@@ -24,4 +25,5 @@ export declare class AuthenticationController {
         message: string;
     }>;
     getUserById(id: string): Promise<import("../users/user.schema").UserDocument>;
+    updateUser(id: string, updateUserDto: RegisterDto): Promise<User | null>;
 }

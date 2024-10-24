@@ -1,6 +1,5 @@
-import { Document, ObjectId } from 'mongoose';
-import { Address } from './address.schema';
-import { Post } from '../flights/flights.schema';
+import { Document, ObjectId } from "mongoose";
+import { Post } from "../flights/flights.schema";
 export type UserDocument = User & Document;
 export declare class User {
     _id: ObjectId;
@@ -8,7 +7,14 @@ export declare class User {
     userName: string;
     fullName: string;
     password: string;
-    address: Address;
+    address: string;
+    name: string;
+    birthDate: Date;
+    gender: string;
+    phoneNo: string;
+    nameOnCard: string;
+    billingAddress: string;
+    expirationDate: Date;
     creditCardNumber?: string;
     posts: Post[];
 }

@@ -174,11 +174,12 @@ export class AuthenticationController {
   }
 
   // Update user endpoint
-  @Put("profileUpdate:id")
+  @Put("profileUpdate/:id")
   async updateUser(
     @Param("id") id: string,
     @Body() updateUserDto: RegisterDto
   ): Promise<User | null> {
+    console.log("updateUserDto", updateUserDto);
     return this.userService.updateUser(id, updateUserDto);
   }
 }

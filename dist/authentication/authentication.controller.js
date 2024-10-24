@@ -115,6 +115,10 @@ let AuthenticationController = class AuthenticationController {
             throw new common_1.NotFoundException("User not found");
         }
     }
+    async updateUser(id, updateUserDto) {
+        console.log("updateUserDto", updateUserDto);
+        return this.userService.updateUser(id, updateUserDto);
+    }
 };
 __decorate([
     (0, common_1.Post)("register"),
@@ -169,6 +173,14 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], AuthenticationController.prototype, "getUserById", null);
+__decorate([
+    (0, common_1.Put)("profileUpdate/:id"),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, register_dto_1.default]),
+    __metadata("design:returntype", Promise)
+], AuthenticationController.prototype, "updateUser", null);
 AuthenticationController = __decorate([
     (0, common_1.Controller)("authentication"),
     (0, common_1.UseInterceptors)((0, mongooseClassSerializer_interceptor_1.default)(user_schema_1.User)),
