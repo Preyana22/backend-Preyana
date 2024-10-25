@@ -117,7 +117,20 @@ let AuthenticationController = class AuthenticationController {
     }
     async updateUser(id, updateUserDto) {
         console.log("updateUserDto", updateUserDto);
-        return this.userService.updateUser(id, updateUserDto);
+        try {
+            const updatedUser = await this.userService.updateUser(id, updateUserDto);
+            if (!updatedUser) {
+                throw new Error("User not found or update failed.");
+            }
+            return { message: "User updated successfully!", user: updatedUser };
+        }
+        catch (error) {
+            console.error("Error updating user:", error);
+            throw new common_1.HttpException({
+                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
+                error: error.message || "An error occurred while updating the user.",
+            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 };
 __decorate([

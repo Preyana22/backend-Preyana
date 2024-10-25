@@ -11,6 +11,8 @@ import {
   Param,
   NotFoundException,
   Put,
+  HttpStatus,
+  HttpException,
 } from "@nestjs/common";
 import { AuthenticationService } from "./authentication.service";
 import RegisterDto from "./dto/register.dto";
@@ -178,8 +180,29 @@ export class AuthenticationController {
   async updateUser(
     @Param("id") id: string,
     @Body() updateUserDto: RegisterDto
-  ): Promise<User | null> {
+  ): Promise<{ message: string; user: User | null }> {
     console.log("updateUserDto", updateUserDto);
-    return this.userService.updateUser(id, updateUserDto);
+
+    try {
+      const updatedUser = await this.userService.updateUser(id, updateUserDto);
+
+      // If no user was found or updated, you can return a specific message
+      if (!updatedUser) {
+        throw new Error("User not found or update failed.");
+      }
+
+      // Return a success message along with the updated user
+      return { message: "User updated successfully!", user: updatedUser };
+    } catch (error: any) {
+      // Handle any errors that occur during the update process
+      console.error("Error updating user:", error);
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: error.message || "An error occurred while updating the user.",
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
   }
 }

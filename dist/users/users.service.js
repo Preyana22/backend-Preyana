@@ -99,7 +99,6 @@ let UsersService = class UsersService {
         }
     }
     async updateUser(id, updateUserDto) {
-        console.log("updateUserDto", updateUserDto);
         const user = await this.getById(id);
         if (!user) {
             throw new common_1.NotFoundException(`User with ID ${id} not found`);

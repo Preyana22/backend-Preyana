@@ -21,7 +21,6 @@ export class BookingController {
   async create(@Body() createBookingDto: any) {
     console.log("createbooking", createBookingDto);
     try {
-      console.log("createBookingDto", createBookingDto);
       // Call the service to create a booking
       const booking = await this.bookingService.create(createBookingDto);
       return {
@@ -52,11 +51,42 @@ export class BookingController {
     }
   }
 
-  @Get("bookings/:email")
-  async findAll(@Param("email") email: string) {
-    const results = await this.bookingService.findAll(email);
-    console.log("Bookings found:", results); // Add this line for debugging
-    return results;
+  @Get("bookings") // This will match the email parameter in the query string
+  async findAll(
+    @Query("email") email: string,
+    @Query("keyword") keyword?: string,
+    @Query("upcoming") upcoming?: boolean
+  ) {
+    try {
+      // Validate email format
+      if (!email || !this.isValidEmail(email)) {
+        throw new HttpException(
+          "Invalid email format.",
+          HttpStatus.BAD_REQUEST
+        );
+      }
+
+      const results = await this.bookingService.findAll(
+        email,
+        keyword,
+        upcoming
+      );
+
+      console.log("Bookings found:", results); // Debugging
+      return results;
+    } catch (error: any) {
+      console.error("Error fetching bookings:", error.message); // Log the error
+      throw new HttpException(
+        "Failed to fetch bookings. Please try again later.",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  // Helper function to validate email format
+  private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   }
   @Get("booking/:id")
   async findOne(@Param("id") id: string) {

@@ -6,7 +6,8 @@ export declare class BookingController {
         message: string;
         booking: import("./schemas/booking.schema").Booking;
     }>;
-    findAll(email: string): Promise<import("./schemas/booking.schema").Booking[] | null>;
+    findAll(email: string, keyword?: string, upcoming?: boolean): Promise<import("./schemas/booking.schema").BookingDocument[] | null>;
+    private isValidEmail;
     findOne(id: string): Promise<import("./schemas/booking.schema").Booking | null>;
     update(id: string, updateBookingDto: any): Promise<{
         message: string;

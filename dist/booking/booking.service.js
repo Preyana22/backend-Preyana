@@ -24,16 +24,54 @@ let BookingService = class BookingService {
     }
     async create(createBookingDto) {
         try {
-            const createdBooking = new this.bookingModel(createBookingDto);
-            await createdBooking
-                .populate({
-                path: "bookings",
-                populate: {
-                    path: "email",
-                },
-            })
-                .execPopulate();
-            return await createdBooking.save();
+            const bookingDetails = {
+                name: createBookingDto.name,
+                email: createBookingDto.email,
+                loginEmail: createBookingDto.loginEmail,
+                booking_id: createBookingDto.booking_id,
+                booking_reference: createBookingDto.booking_reference,
+                offer_id: createBookingDto.offer_id,
+                status: createBookingDto.status,
+                address1: createBookingDto.address1,
+                address2: createBookingDto.address2,
+                city: createBookingDto.city,
+                region: createBookingDto.region,
+                postal: createBookingDto.postal,
+                country: createBookingDto.country,
+                airlines: createBookingDto.airlines,
+                slices: [],
+            };
+            const slices = createBookingDto.slices || [];
+            slices.forEach((slice) => {
+                bookingDetails.slices.push({
+                    travelDate: slice.travelDate,
+                    departTime: slice.departTime,
+                    arrivalTime: slice.arrivalTime,
+                    flightDuration: slice.flightDuration,
+                    stops: slice.stops,
+                    departAirport: slice.departAirport,
+                    arrivalAirport: slice.arrivalAirport,
+                    departCityName: slice.departCityName,
+                    arrivalCityName: slice.arrivalCityName,
+                });
+            });
+            try {
+                const createdBooking = new this.bookingModel(bookingDetails);
+                console.log("createdBooking", createdBooking);
+                await createdBooking
+                    .populate({
+                    path: "bookings",
+                    populate: {
+                        path: "email",
+                    },
+                })
+                    .execPopulate();
+                return await createdBooking.save();
+            }
+            catch (error) {
+                console.error("Error while saving booking:", error);
+                throw new Error("Failed to save booking details. Please try again.");
+            }
         }
         catch (error) {
             console.error("Error creating booking:", error);
@@ -48,16 +86,70 @@ let BookingService = class BookingService {
             }
         }
     }
-    async findAll(value) {
-        console.log("Filtering by value:", value);
-        return this.bookingModel
-            .find({
-            $or: [
-                { email: { $regex: value, $options: "i" } },
-                { loginEmail: { $regex: value, $options: "i" } },
-            ],
-        })
-            .exec();
+    async findAll(email, keyword, upcoming) {
+        try {
+            console.log("Filtering by email:", email);
+            const filter = {
+                $or: [
+                    { email: { $regex: `^${email}$`, $options: "i" } },
+                    { loginEmail: { $regex: `^${email}$`, $options: "i" } },
+                ],
+            };
+            if (keyword) {
+                console.log("Keyword provided:", keyword);
+                filter.$and = [
+                    ...(filter.$and || []),
+                    {
+                        $or: [
+                            { booking_reference: { $regex: keyword, $options: "i" } },
+                            { name: { $regex: keyword, $options: "i" } },
+                            { airlines: { $regex: keyword, $options: "i" } },
+                            {
+                                slices: {
+                                    $elemMatch: {
+                                        arrivalAirport: { $regex: keyword, $options: "i" },
+                                    },
+                                },
+                            },
+                            {
+                                slices: {
+                                    $elemMatch: {
+                                        departAirport: { $regex: keyword, $options: "i" },
+                                    },
+                                },
+                            },
+                            {
+                                slices: {
+                                    $elemMatch: {
+                                        departCityName: { $regex: keyword, $options: "i" },
+                                    },
+                                },
+                            },
+                            {
+                                slices: {
+                                    $elemMatch: {
+                                        arrivalCityName: { $regex: keyword, $options: "i" },
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                ];
+            }
+            if (upcoming !== undefined) {
+                const currentDate = new Date();
+                const startOfToday = new Date(currentDate.setHours(0, 0, 0, 0));
+                const startOfTomorrow = new Date(currentDate.setHours(24, 0, 0, 0));
+                filter["createdOn"] = upcoming
+                    ? { $gte: startOfToday, $lt: startOfTomorrow }
+                    : { $lt: startOfToday };
+            }
+            return await this.bookingModel.find(filter).exec();
+        }
+        catch (error) {
+            console.error("Error in findAll service method:", error.message);
+            throw new common_1.InternalServerErrorException("Error retrieving bookings");
+        }
     }
     async findById(id) {
         return this.bookingModel.findById(id).exec();

@@ -1,4 +1,5 @@
 import { Document } from "mongoose";
+import { FlightSegment } from "./flightsegment.schema";
 export type BookingDocument = Booking & Document;
 export declare class Booking {
     name: string;
@@ -15,5 +16,7 @@ export declare class Booking {
     postal: string;
     country: string;
     createdOn: Date;
+    airlines: string;
+    slices: FlightSegment[];
 }
 export declare const BookingSchema: import("mongoose").Schema<Document<Booking, any, any>, import("mongoose").Model<Document<Booking, any, any>, any, any>, undefined, {}>;

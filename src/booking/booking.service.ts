@@ -1,8 +1,10 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Booking, BookingDocument } from "./schemas/booking.schema";
 import { ObjectId } from "mongodb"; // Import ObjectId
+import { FilterQuery } from "mongoose"; // Assuming you are using Mongoose
+import { FlightSegment } from "./schemas/flightsegment.schema";
 
 @Injectable()
 export class BookingService {
@@ -12,25 +14,63 @@ export class BookingService {
 
   async create(createBookingDto: any): Promise<Booking> {
     try {
-      const createdBooking = new this.bookingModel(createBookingDto);
+      const bookingDetails = {
+        name: createBookingDto.name,
+        email: createBookingDto.email,
+        loginEmail: createBookingDto.loginEmail,
+        booking_id: createBookingDto.booking_id,
+        booking_reference: createBookingDto.booking_reference,
+        offer_id: createBookingDto.offer_id,
+        status: createBookingDto.status,
+        address1: createBookingDto.address1,
+        address2: createBookingDto.address2,
+        city: createBookingDto.city,
+        region: createBookingDto.region,
+        postal: createBookingDto.postal,
+        country: createBookingDto.country,
+        airlines: createBookingDto.airlines,
+        slices: [] as FlightSegment[], // Initialize as an array of FlightSegment
+      };
 
-      // Populate the related fields
-      await createdBooking
-        .populate({
-          path: "bookings",
-          populate: {
-            path: "email",
-          },
-        })
-        .execPopulate();
+      // Process each slice
+      const slices = createBookingDto.slices || [];
 
-      // Save the booking and return the result
-      return await createdBooking.save();
+      slices.forEach((slice: any) => {
+        bookingDetails.slices.push({
+          travelDate: slice.travelDate,
+          departTime: slice.departTime,
+          arrivalTime: slice.arrivalTime,
+          flightDuration: slice.flightDuration,
+          stops: slice.stops,
+          departAirport: slice.departAirport,
+          arrivalAirport: slice.arrivalAirport,
+          departCityName: slice.departCityName,
+          arrivalCityName: slice.arrivalCityName,
+        });
+      });
+      // Create a new booking instance
+      try {
+        const createdBooking = new this.bookingModel(bookingDetails);
+        console.log("createdBooking", createdBooking);
+        // Populate related fields if necessary
+        await createdBooking
+          .populate({
+            path: "bookings",
+            populate: {
+              path: "email",
+            },
+          })
+          .execPopulate();
+
+        // Save and return the created booking
+        return await createdBooking.save();
+      } catch (error: any) {
+        console.error("Error while saving booking:", error);
+        throw new Error("Failed to save booking details. Please try again.");
+      }
     } catch (error: any) {
-      // Log the error for debugging purposes
+      // Handle errors
       console.error("Error creating booking:", error);
-
-      // Handle different types of errors based on the error message or code
       if (error.name === "ValidationError") {
         throw new Error("Invalid booking data. Please check the input.");
       } else if (error.name === "MongoError" && error.code === 11000) {
@@ -38,7 +78,6 @@ export class BookingService {
           "Duplicate booking detected. A record with similar details already exists."
         );
       } else {
-        // Generic error handling
         throw new Error(
           "An error occurred while creating the booking. Please try again later."
         );
@@ -46,17 +85,91 @@ export class BookingService {
     }
   }
 
-  async findAll(value: string): Promise<Booking[] | null> {
-    console.log("Filtering by value:", value);
-    return this.bookingModel
-      .find({
+  async findAll(
+    email: string, // This email is now directly taken from the @Query
+    keyword?: string,
+    upcoming?: boolean
+  ): Promise<BookingDocument[] | null> {
+    try {
+      // Log the email filtering
+      console.log("Filtering by email:", email);
+
+      // Construct the initial filter based on the email
+      const filter: FilterQuery<BookingDocument> = {
         $or: [
-          { email: { $regex: value, $options: "i" } },
-          { loginEmail: { $regex: value, $options: "i" } },
-          // Add other fields here if needed
+          { email: { $regex: `^${email}$`, $options: "i" } },
+          { loginEmail: { $regex: `^${email}$`, $options: "i" } },
         ],
-      })
-      .exec();
+      };
+
+      // Add a separate keyword filter if provided (not combined with email)
+      if (keyword) {
+        console.log("Keyword provided:", keyword);
+        filter.$and = [
+          ...(filter.$and || []), // Ensure $and is initialized if not already
+          {
+            $or: [
+              { booking_reference: { $regex: keyword, $options: "i" } },
+              { name: { $regex: keyword, $options: "i" } },
+              { airlines: { $regex: keyword, $options: "i" } },
+              {
+                // Add condition for slices.arrivalAirport
+                slices: {
+                  $elemMatch: {
+                    arrivalAirport: { $regex: keyword, $options: "i" },
+                  },
+                },
+              },
+              {
+                // Add condition for slices.departlAirport
+                slices: {
+                  $elemMatch: {
+                    departAirport: { $regex: keyword, $options: "i" },
+                  },
+                },
+              },
+              {
+                // Add condition for slices.departlAirport
+                slices: {
+                  $elemMatch: {
+                    departCityName: { $regex: keyword, $options: "i" },
+                  },
+                },
+              },
+              {
+                // Add condition for slices.departlAirport
+                slices: {
+                  $elemMatch: {
+                    arrivalCityName: { $regex: keyword, $options: "i" },
+                  },
+                },
+              },
+            ],
+          },
+        ];
+      }
+
+      // Add date-based filtering for upcoming or past bookings
+      if (upcoming !== undefined) {
+        const currentDate = new Date();
+
+        // Create a date object for the start of today
+        const startOfToday = new Date(currentDate.setHours(0, 0, 0, 0));
+
+        // Create a date object for the start of tomorrow
+        const startOfTomorrow = new Date(currentDate.setHours(24, 0, 0, 0));
+
+        filter["createdOn"] = upcoming
+          ? { $gte: startOfToday, $lt: startOfTomorrow } // Upcoming: from start of today to start of tomorrow
+          : { $lt: startOfToday }; // Past: less than the start of today
+      }
+
+      // Execute the query with the constructed filter
+      return await this.bookingModel.find(filter).exec();
+    } catch (error: any) {
+      console.error("Error in findAll service method:", error.message);
+      throw new InternalServerErrorException("Error retrieving bookings");
+    }
   }
 
   async findById(id: string): Promise<Booking | null> {

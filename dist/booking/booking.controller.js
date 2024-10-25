@@ -22,7 +22,6 @@ let BookingController = class BookingController {
     async create(createBookingDto) {
         console.log("createbooking", createBookingDto);
         try {
-            console.log("createBookingDto", createBookingDto);
             const booking = await this.bookingService.create(createBookingDto);
             return {
                 message: "Booking created successfully",
@@ -42,10 +41,23 @@ let BookingController = class BookingController {
             }
         }
     }
-    async findAll(email) {
-        const results = await this.bookingService.findAll(email);
-        console.log("Bookings found:", results);
-        return results;
+    async findAll(email, keyword, upcoming) {
+        try {
+            if (!email || !this.isValidEmail(email)) {
+                throw new common_1.HttpException("Invalid email format.", common_1.HttpStatus.BAD_REQUEST);
+            }
+            const results = await this.bookingService.findAll(email, keyword, upcoming);
+            console.log("Bookings found:", results);
+            return results;
+        }
+        catch (error) {
+            console.error("Error fetching bookings:", error.message);
+            throw new common_1.HttpException("Failed to fetch bookings. Please try again later.", common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
     }
     async findOne(id) {
         return this.bookingService.findById(id);
@@ -144,10 +156,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BookingController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)("bookings/:email"),
-    __param(0, (0, common_1.Param)("email")),
+    (0, common_1.Get)("bookings"),
+    __param(0, (0, common_1.Query)("email")),
+    __param(1, (0, common_1.Query)("keyword")),
+    __param(2, (0, common_1.Query)("upcoming")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, String, Boolean]),
     __metadata("design:returntype", Promise)
 ], BookingController.prototype, "findAll", null);
 __decorate([

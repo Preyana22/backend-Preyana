@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
+import { FlightSegment, FlightSegmentSchema } from "./flightsegment.schema"; // Adjust the import as needed
 
 export type BookingDocument = Booking & Document;
 
@@ -46,6 +47,12 @@ export class Booking {
 
   @Prop({ required: false, default: () => new Date() })
   createdOn: Date;
+
+  @Prop({ required: false })
+  airlines: string;
+
+  @Prop({ type: [FlightSegmentSchema], required: false }) // Use FlightSegmentSchema here
+  slices: FlightSegment[];
 }
 
 export const BookingSchema = SchemaFactory.createForClass(Booking);

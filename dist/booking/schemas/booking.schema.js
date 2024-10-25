@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookingSchema = exports.Booking = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
+const flightsegment_schema_1 = require("./flightsegment.schema");
 let Booking = class Booking {
 };
 __decorate([
@@ -69,6 +70,14 @@ __decorate([
     (0, mongoose_1.Prop)({ required: false, default: () => new Date() }),
     __metadata("design:type", Date)
 ], Booking.prototype, "createdOn", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], Booking.prototype, "airlines", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [flightsegment_schema_1.FlightSegmentSchema], required: false }),
+    __metadata("design:type", Array)
+], Booking.prototype, "slices", void 0);
 Booking = __decorate([
     (0, mongoose_1.Schema)()
 ], Booking);

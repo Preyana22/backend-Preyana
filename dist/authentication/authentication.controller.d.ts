@@ -25,5 +25,8 @@ export declare class AuthenticationController {
         message: string;
     }>;
     getUserById(id: string): Promise<import("../users/user.schema").UserDocument>;
-    updateUser(id: string, updateUserDto: RegisterDto): Promise<User | null>;
+    updateUser(id: string, updateUserDto: RegisterDto): Promise<{
+        message: string;
+        user: User | null;
+    }>;
 }
