@@ -28,7 +28,7 @@ __decorate([
     __metadata("design:type", String)
 ], RegisterDto.prototype, "name", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: false, default: () => new Date() }),
+    (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", Date)
 ], RegisterDto.prototype, "birthDate", void 0);
 __decorate([
@@ -44,7 +44,7 @@ __decorate([
     __metadata("design:type", String)
 ], RegisterDto.prototype, "address", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: false, default: () => new Date() }),
+    (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "nameOnCard", void 0);
 __decorate([
@@ -52,7 +52,7 @@ __decorate([
     __metadata("design:type", String)
 ], RegisterDto.prototype, "billingAddress", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: false, default: () => new Date() }),
+    (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", Date)
 ], RegisterDto.prototype, "expirationDate", void 0);
 exports.RegisterDto = RegisterDto;

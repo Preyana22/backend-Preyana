@@ -17,7 +17,7 @@ export class RegisterDto {
   @Prop({ required: false })
   name: string;
 
-  @Prop({ required: false, default: () => new Date() })
+  @Prop({ required: false })
   birthDate: Date;
 
   @Prop({ required: false })
@@ -29,13 +29,13 @@ export class RegisterDto {
   @Prop({ required: false })
   address: string;
 
-  @Prop({ required: false, default: () => new Date() })
+  @Prop({ required: false })
   nameOnCard: string;
 
   @Prop({ required: false })
   billingAddress: string;
 
-  @Prop({ required: false, default: () => new Date() })
+  @Prop({ required: false })
   expirationDate: Date;
 }
 

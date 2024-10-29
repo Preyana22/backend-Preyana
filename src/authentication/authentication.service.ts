@@ -28,20 +28,24 @@ export class AuthenticationService {
 
   public async register(registrationData: RegisterDto) {
     const hashedPassword = await bcrypt.hash(registrationData.password, 10);
+
     try {
       return await this.usersService.create({
         ...registrationData,
         password: hashedPassword,
       });
-    } catch (error) {
+    } catch (error: any) {
+      // Handle duplicate email error
       if ((error as any)?.code === MongoError.DuplicateKey) {
         throw new HttpException(
           "User with that email already exists",
           HttpStatus.BAD_REQUEST
         );
       }
+
+      // Handle unexpected errors
       throw new HttpException(
-        "Something went wrong",
+        "Something went wrong during registration",
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     }

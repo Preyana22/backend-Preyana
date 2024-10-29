@@ -41,7 +41,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "name", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: false, default: () => new Date() }),
+    (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", Date)
 ], User.prototype, "birthDate", void 0);
 __decorate([
@@ -53,7 +53,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "phoneNo", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: false, default: () => new Date() }),
+    (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", String)
 ], User.prototype, "nameOnCard", void 0);
 __decorate([
@@ -61,7 +61,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "billingAddress", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: false, default: () => new Date() }),
+    (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", Date)
 ], User.prototype, "expirationDate", void 0);
 __decorate([

@@ -34,7 +34,7 @@ export class User {
   @Prop({ required: false })
   name: string;
 
-  @Prop({ required: false, default: () => new Date() })
+  @Prop({ required: false })
   birthDate: Date;
 
   @Prop({ required: false })
@@ -43,13 +43,13 @@ export class User {
   @Prop({ required: false })
   phoneNo: string;
 
-  @Prop({ required: false, default: () => new Date() })
+  @Prop({ required: false })
   nameOnCard: string;
 
   @Prop({ required: false })
   billingAddress: string;
 
-  @Prop({ required: false, default: () => new Date() })
+  @Prop({ required: false })
   expirationDate: Date;
 
   @Prop({

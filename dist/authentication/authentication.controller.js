@@ -31,7 +31,7 @@ let AuthenticationController = class AuthenticationController {
         let password = registrationData.password;
         if (!password) {
             password = this.generateRandomPassword();
-            console.log("password " + password);
+            console.log("Generated password:", password);
             try {
                 await this.emailService.sendPasswordEmail(registrationData.email, password);
             }
@@ -44,7 +44,9 @@ let AuthenticationController = class AuthenticationController {
             return await this.authenticationService.register(Object.assign(Object.assign({}, registrationData), { password }));
         }
         catch (error) {
-            console.error("Error during registration:", error.message);
+            if ((error === null || error === void 0 ? void 0 : error.status) === 400) {
+                throw new common_1.HttpException(error === null || error === void 0 ? void 0 : error.response, common_1.HttpStatus.BAD_REQUEST);
+            }
             throw new common_1.InternalServerErrorException("Failed to register. Please try again later.");
         }
     }

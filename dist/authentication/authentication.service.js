@@ -36,7 +36,7 @@ let AuthenticationService = class AuthenticationService {
             if ((error === null || error === void 0 ? void 0 : error.code) === mongoError_enum_1.default.DuplicateKey) {
                 throw new common_1.HttpException("User with that email already exists", common_1.HttpStatus.BAD_REQUEST);
             }
-            throw new common_1.HttpException("Something went wrong", common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new common_1.HttpException("Something went wrong during registration", common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     getCookieWithJwtToken(userId) {

@@ -23,6 +23,7 @@ import { User } from "../users/user.schema";
 import MongooseClassSerializerInterceptor from "../utils/mongooseClassSerializer.interceptor";
 import { EmailService } from "src/users/email.service";
 import UsersService from "src/users/users.service";
+import MongoError from "src/utils/mongoError.enum";
 
 @Controller("authentication")
 @UseInterceptors(MongooseClassSerializerInterceptor(User))
@@ -41,8 +42,9 @@ export class AuthenticationController {
     if (!password) {
       // Generate a random password
       password = this.generateRandomPassword();
-      console.log("password " + password);
-      // Try to send the generated password to the user's email
+      console.log("Generated password:", password);
+
+      // Attempt to send the generated password to the user's email
       try {
         await this.emailService.sendPasswordEmail(
           registrationData.email,
@@ -51,21 +53,28 @@ export class AuthenticationController {
       } catch (error: any) {
         console.error("Error sending email:", error.message);
 
-        // Handle the email sending failure
+        // Handle email sending failure
         throw new InternalServerErrorException(
           "Failed to send password email. Please try again later."
         );
       }
     }
 
-    // Proceed with the registration process if email was sent successfully
+    // Proceed with the registration process if the email was sent successfully
     try {
       return await this.authenticationService.register({
         ...registrationData,
         password,
       });
     } catch (error: any) {
-      console.error("Error during registration:", error.message);
+      // Handle duplicate email error
+      if ((error as any)?.status === 400) {
+        throw new HttpException(
+          (error as any)?.response,
+          HttpStatus.BAD_REQUEST
+        );
+      }
+
       throw new InternalServerErrorException(
         "Failed to register. Please try again later."
       );
