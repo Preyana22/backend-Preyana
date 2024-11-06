@@ -15,18 +15,18 @@ const nodemailer = require("nodemailer");
 let EmailService = class EmailService {
     constructor() {
         this.transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
+            host: "email-smtp.us-east-2.amazonaws.com",
             port: 587,
             secure: false,
             auth: {
-                user: "bsskk2022@gmail.com",
-                pass: "vggtkmvrrddxshdc",
+                user: "AKIAZR7XQOHLCFM35Q65",
+                pass: "BMIVwk4atHlHo+QYzxMdaInDXn2FKT9hOYqN3OGdTCbI",
             },
         });
     }
     async sendPasswordEmail(recipientEmail, password) {
         const mailOptions = {
-            from: "bsskk2022@gmail.com",
+            from: "authentz-no-reply@xtensible.in",
             to: recipientEmail,
             subject: "Your Account Password",
             text: `Here is your generated password: ${password}`,
@@ -45,7 +45,7 @@ let EmailService = class EmailService {
     }
     async sendResetMail(to, subject, text) {
         await this.transporter.sendMail({
-            from: "bsskk2022@gmail.com",
+            from: "authentz-no-reply@xtensible.in",
             to,
             subject,
             text,

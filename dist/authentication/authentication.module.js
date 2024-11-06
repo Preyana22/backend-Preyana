@@ -44,12 +44,12 @@ AuthenticationModule = __decorate([
                     port: 587,
                     secure: false,
                     auth: {
-                        user: "bsskk2022@gmail.com",
-                        pass: "vggtkmvrrddxshdc",
+                        user: "AKIAZR7XQOHLCFM35Q65",
+                        pass: "BMIVwk4atHlHo+QYzxMdaInDXn2FKT9hOYqN3OGdTCbI",
                     },
                 },
                 defaults: {
-                    from: '"No Reply" <no-reply@example.com>',
+                    from: "authentz-no-reply@xtensible.in",
                 },
                 template: {
                     dir: path.join(process.cwd(), "src", "templates"),

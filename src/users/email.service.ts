@@ -7,19 +7,19 @@ export class EmailService {
 
   constructor() {
     this.transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
+      host: "email-smtp.us-east-2.amazonaws.com",
       port: 587,
       secure: false, // true for 465, false for 587
       auth: {
-        user: "bsskk2022@gmail.com", // Your Gmail address
-        pass: "vggtkmvrrddxshdc", // Your Gmail password
+        user: "AKIAZR7XQOHLCFM35Q65", // Your Gmail address
+        pass: "BMIVwk4atHlHo+QYzxMdaInDXn2FKT9hOYqN3OGdTCbI", // Your Gmail password
       },
     });
   }
 
   async sendPasswordEmail(recipientEmail: string, password: string) {
     const mailOptions = {
-      from: "bsskk2022@gmail.com", // Your email address
+      from: "authentz-no-reply@xtensible.in", // Your email address
       to: recipientEmail,
       subject: "Your Account Password",
       text: `Here is your generated password: ${password}`,
@@ -40,7 +40,7 @@ export class EmailService {
 
   async sendResetMail(to: string, subject: string, text: string) {
     await this.transporter.sendMail({
-      from: "bsskk2022@gmail.com",
+      from: "authentz-no-reply@xtensible.in",
       to,
       subject,
       text,
