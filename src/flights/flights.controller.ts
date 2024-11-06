@@ -33,7 +33,7 @@ export default class PostsController {
     const duffelHeaders = {
       "Duffel-Version": "v1",
       Authorization:
-        "Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
+        "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
     };
     const getAirports = await fetch(
       "https://api.duffel.com/places/suggestions?query=" + searchQuery,
@@ -67,12 +67,8 @@ export default class PostsController {
     }
 
     const duffel = new Duffel({
-      token: "duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
+      token: "duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
     });
-
-    // const duffel = new Duffel({
-    //   token: "duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
-    // });
 
     let econamy: any = "econamy";
 
@@ -143,7 +139,7 @@ export default class PostsController {
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization:
-        "Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
+        "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
     };
 
     const clone = JSON.parse(JSON.stringify(request));
@@ -208,7 +204,7 @@ export default class PostsController {
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization:
-        "Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
+        "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
     };
 
     // Making the second API call to create the payment intent
