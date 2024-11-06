@@ -86,7 +86,7 @@ let AuthenticationService = class AuthenticationService {
             template: "../templates/forgot-password",
             context: {
                 name: user.email,
-                resetLink: `http://192.168.1.92:3001/reset-password?token=${resetToken}`,
+                resetLink: `http://192.168.1.92:3001/reset`,
             },
         });
     }

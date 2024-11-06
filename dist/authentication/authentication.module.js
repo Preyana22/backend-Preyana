@@ -40,7 +40,7 @@ AuthenticationModule = __decorate([
             }),
             mailer_1.MailerModule.forRoot({
                 transport: {
-                    host: "smtp.gmail.com",
+                    host: "email-smtp.us-east-2.amazonaws.com",
                     port: 587,
                     secure: false,
                     auth: {

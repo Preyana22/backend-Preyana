@@ -126,7 +126,7 @@ export class AuthenticationService {
       template: "../templates/forgot-password", // Path to your email template
       context: {
         name: user.email,
-        resetLink: `http://192.168.1.92:3001/reset-password?token=${resetToken}`,
+        resetLink: `http://192.168.1.92:3001/reset`,
       },
     });
   }
