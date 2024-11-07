@@ -30,6 +30,8 @@ async function bootstrap() {
         "http://52.14.78.149",
         "http://192.168.1.92:3001",
         "http://preyana.com",
+        "https://preyana.com",
+        "https://www.preyana.com",
       ],
       optionsSuccessStatus: 200,
     })
