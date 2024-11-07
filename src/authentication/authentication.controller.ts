@@ -13,6 +13,7 @@ import {
   Put,
   HttpStatus,
   HttpException,
+  Query,
 } from "@nestjs/common";
 import { AuthenticationService } from "./authentication.service";
 import RegisterDto from "./dto/register.dto";
@@ -213,5 +214,13 @@ export class AuthenticationController {
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
+  }
+
+  @Get("check-email")
+  async checkEmail(@Query("email") email: string) {
+    const emailExists = await this.authenticationService.checkEmailExists(
+      email
+    );
+    return { exists: emailExists };
   }
 }

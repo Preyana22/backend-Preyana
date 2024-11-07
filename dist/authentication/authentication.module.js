@@ -20,12 +20,15 @@ const email_service_1 = require("../users/email.service");
 const mailer_1 = require("@nestjs-modules/mailer");
 const handlebars_adapter_1 = require("@nestjs-modules/mailer/dist/adapters/handlebars.adapter");
 const path = require("path");
+const user_schema_1 = require("../users/user.schema");
+const mongoose_1 = require("@nestjs/mongoose");
 let AuthenticationModule = class AuthenticationModule {
 };
 AuthenticationModule = __decorate([
     (0, common_1.Module)({
         imports: [
             users_module_1.UsersModule,
+            mongoose_1.MongooseModule.forFeature([{ name: user_schema_1.User.name, schema: user_schema_1.UserSchema }]),
             passport_1.PassportModule,
             config_1.ConfigModule,
             jwt_1.JwtModule.registerAsync({

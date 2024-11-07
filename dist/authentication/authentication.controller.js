@@ -134,6 +134,10 @@ let AuthenticationController = class AuthenticationController {
             }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    async checkEmail(email) {
+        const emailExists = await this.authenticationService.checkEmailExists(email);
+        return { exists: emailExists };
+    }
 };
 __decorate([
     (0, common_1.Post)("register"),
@@ -196,6 +200,13 @@ __decorate([
     __metadata("design:paramtypes", [String, register_dto_1.default]),
     __metadata("design:returntype", Promise)
 ], AuthenticationController.prototype, "updateUser", null);
+__decorate([
+    (0, common_1.Get)("check-email"),
+    __param(0, (0, common_1.Query)("email")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AuthenticationController.prototype, "checkEmail", null);
 AuthenticationController = __decorate([
     (0, common_1.Controller)("authentication"),
     (0, common_1.UseInterceptors)((0, mongooseClassSerializer_interceptor_1.default)(user_schema_1.User)),

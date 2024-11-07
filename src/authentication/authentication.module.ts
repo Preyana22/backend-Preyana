@@ -12,10 +12,13 @@ import UsersService from "src/users/users.service";
 import { MailerModule } from "@nestjs-modules/mailer";
 import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter";
 import * as path from "path";
+import { User, UserSchema } from "src/users/user.schema";
+import { MongooseModule } from "@nestjs/mongoose";
 
 @Module({
   imports: [
     UsersModule,
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     PassportModule,
     ConfigModule,
     JwtModule.registerAsync({
@@ -28,7 +31,6 @@ import * as path from "path";
         },
       }),
     }),
-
     MailerModule.forRoot({
       transport: {
         host: "email-smtp.us-east-2.amazonaws.com",

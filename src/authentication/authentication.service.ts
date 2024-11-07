@@ -15,6 +15,9 @@ import { EmailService } from "src/users/email.service";
 import { MailerService } from "@nestjs-modules/mailer";
 import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
+import { InjectModel } from "@nestjs/mongoose";
+import { User, UserDocument } from "src/users/user.schema";
+import { Model } from "mongoose";
 
 @Injectable()
 export class AuthenticationService {
@@ -23,7 +26,8 @@ export class AuthenticationService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly emailService: EmailService,
-    private readonly mailerService: MailerService
+    private readonly mailerService: MailerService,
+    @InjectModel(User.name) private userModel: Model<UserDocument>
   ) {}
 
   public async register(registrationData: RegisterDto) {
@@ -208,5 +212,10 @@ export class AuthenticationService {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword; // Optionally, hash this temporary password before saving
     await this.usersService.updatePassword(user.email, user.password);
+  }
+
+  async checkEmailExists(email: string): Promise<boolean> {
+    const user = await this.userModel.findOne({ email }).exec();
+    return !!user;
   }
 }

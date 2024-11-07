@@ -8,6 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthenticationService = void 0;
 const common_1 = require("@nestjs/common");
@@ -19,13 +22,17 @@ const email_service_1 = require("../users/email.service");
 const mailer_1 = require("@nestjs-modules/mailer");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const mongoose_1 = require("@nestjs/mongoose");
+const user_schema_1 = require("../users/user.schema");
+const mongoose_2 = require("mongoose");
 let AuthenticationService = class AuthenticationService {
-    constructor(usersService, jwtService, configService, emailService, mailerService) {
+    constructor(usersService, jwtService, configService, emailService, mailerService, userModel) {
         this.usersService = usersService;
         this.jwtService = jwtService;
         this.configService = configService;
         this.emailService = emailService;
         this.mailerService = mailerService;
+        this.userModel = userModel;
     }
     async register(registrationData) {
         const hashedPassword = await bcrypt.hash(registrationData.password, 10);
@@ -104,14 +111,20 @@ let AuthenticationService = class AuthenticationService {
         user.password = hashedPassword;
         await this.usersService.updatePassword(user.email, user.password);
     }
+    async checkEmailExists(email) {
+        const user = await this.userModel.findOne({ email }).exec();
+        return !!user;
+    }
 };
 AuthenticationService = __decorate([
     (0, common_1.Injectable)(),
+    __param(5, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
     __metadata("design:paramtypes", [users_service_1.default,
         jwt_1.JwtService,
         config_1.ConfigService,
         email_service_1.EmailService,
-        mailer_1.MailerService])
+        mailer_1.MailerService,
+        mongoose_2.Model])
 ], AuthenticationService);
 exports.AuthenticationService = AuthenticationService;
 //# sourceMappingURL=authentication.service.js.map

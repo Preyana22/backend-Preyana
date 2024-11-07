@@ -33,7 +33,7 @@ export default class PostsController {
     const duffelHeaders = {
       "Duffel-Version": "v1",
       Authorization:
-        "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
+        "Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
     };
     const getAirports = await fetch(
       "https://api.duffel.com/places/suggestions?query=" + searchQuery,
@@ -67,7 +67,7 @@ export default class PostsController {
     }
 
     const duffel = new Duffel({
-      token: "duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
+      token: "duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
     });
 
     let econamy: any = "econamy";
@@ -117,29 +117,13 @@ export default class PostsController {
   async booking(@Body() @Req() request: any) {
     console.log("in ts");
 
-    var data = {
-      type: "instant",
-      selected_offers: ["off_00009htYpSCXrwaB9DnUm0"],
-      payments: [
-        {
-          type: "balance",
-          amount: "120.00",
-          currency: "EUR",
-        },
-      ],
-      metadata: {
-        payment_intent_id: "pit_00009hthhsUZ8W4LxQgkjo",
-      },
-      passengers: [],
-    };
-
     const duffelHeaders = {
       "Duffel-Version": "v1",
       "Accept-Encoding": "gzip",
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization:
-        "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
+        "Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
     };
 
     const clone = JSON.parse(JSON.stringify(request));
@@ -204,7 +188,7 @@ export default class PostsController {
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization:
-        "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
+        "Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
     };
 
     // Making the second API call to create the payment intent

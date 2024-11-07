@@ -29,4 +29,7 @@ export declare class AuthenticationController {
         message: string;
         user: User | null;
     }>;
+    checkEmail(email: string): Promise<{
+        exists: boolean;
+    }>;
 }
