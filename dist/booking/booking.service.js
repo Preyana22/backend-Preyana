@@ -140,9 +140,13 @@ let BookingService = class BookingService {
                 const currentDate = new Date();
                 const startOfToday = new Date(currentDate.setHours(0, 0, 0, 0));
                 const startOfTomorrow = new Date(currentDate.setHours(24, 0, 0, 0));
-                filter["createdOn"] = upcoming
-                    ? { $gte: startOfToday, $lt: startOfTomorrow }
-                    : { $lt: startOfToday };
+                filter["slices"] = {
+                    $elemMatch: {
+                        travelDate: upcoming
+                            ? { $gte: startOfToday }
+                            : { $lt: startOfToday },
+                    },
+                };
             }
             return await this.bookingModel.find(filter).exec();
         }

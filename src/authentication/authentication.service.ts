@@ -119,9 +119,8 @@ export class AuthenticationService {
     }
 
     // Generate a reset token (you can customize the expiry time)
-    const resetToken = jwt.sign({ email }, "your_secret_key", {
-      expiresIn: "1h",
-    });
+    // Generate a reset token with 1-hour expiration
+    const resetToken = this.jwtService.sign({ email }, { expiresIn: "1h" });
 
     // Send reset password email
     await this.mailerService.sendMail({
@@ -130,65 +129,35 @@ export class AuthenticationService {
       template: "../templates/forgot-password", // Path to your email template
       context: {
         name: user.email,
-        resetLink: `http://192.168.1.92:3001/reset`,
+        resetLink: `http://192.168.1.92:3001/reset?token=${resetToken}`,
       },
     });
   }
 
-  // async requestPasswordReset(email: string) {
-  //   const user = await this.usersService.getByEmail(email);
+  async resetPassword(
+    token: string,
+    newPassword: string,
+    confirmPassword: string
+  ): Promise<void> {
+    try {
+      // Verify token and extract email
+      const { email } = this.jwtService.verify(token);
+      const user = await this.usersService.getByEmail(email);
 
-  //   if (!user) {
-  //     // Return or throw a specific error if the user is not found
-  //     throw new Error("User not found");
-  //   }
+      if (!user) throw new Error("Invalid token");
 
-  //   // Generate the temporary password
-  //   const tempPassword = this.generateTemporaryPassword();
+      // Check if new password matches confirm password
+      if (newPassword !== confirmPassword) {
+        throw new Error("New password and confirm password do not match.");
+      }
 
-  //   try {
-  //     // Send email with the temporary password
-  //     await this.emailService.sendResetMail(
-  //       user.email,
-  //       "Password Reset Request",
-  //       `Your temporary password is: ${tempPassword}. Please use it to log in and reset your password.`
-  //     );
-
-  //     // If email sent successfully, hash and update the password in the DB
-  //     const hashedPassword = await bcrypt.hash(tempPassword, 10);
-  //     user.password = hashedPassword;
-
-  //     // Update the password in the database
-  //     await this.usersService.updatePassword(email, user.password);
-
-  //     console.log(
-  //       "Password reset email sent and password updated successfully."
-  //     );
-
-  //     // Return a success message or an appropriate response
-  //     return {
-  //       message: "Password reset email sent and password updated successfully.",
-  //     };
-  //   } catch (error: any) {
-  //     console.error(
-  //       "Error sending reset password email or updating password:",
-  //       error
-  //     );
-
-  //     // Check if the error is related to sending the email
-  //     if (error.response && error.response.includes("550-5.4.5")) {
-  //       // Return or throw a specific error for email sending issues
-  //       throw new Error(
-  //         "Failed to send reset password email due to sending limit exceeded."
-  //       );
-  //     }
-
-  //     // Generic error for other cases
-  //     throw new Error(
-  //       "Failed to send reset password email or update the password."
-  //     );
-  //   }
-  // }
+      // Hash the new password and update it in the database
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      await this.usersService.updatePassword(email, hashedPassword);
+    } catch (error: any) {
+      throw new Error(error.message || "Invalid or expired token");
+    }
+  }
 
   async changePassword(
     userId: string,

@@ -159,9 +159,13 @@ export class BookingService {
         // Create a date object for the start of tomorrow
         const startOfTomorrow = new Date(currentDate.setHours(24, 0, 0, 0));
 
-        filter["createdOn"] = upcoming
-          ? { $gte: startOfToday, $lt: startOfTomorrow } // Upcoming: from start of today to start of tomorrow
-          : { $lt: startOfToday }; // Past: less than the start of today
+        filter["slices"] = {
+          $elemMatch: {
+            travelDate: upcoming
+              ? { $gte: startOfToday }
+              : { $lt: startOfToday },
+          },
+        };
       }
 
       // Execute the query with the constructed filter

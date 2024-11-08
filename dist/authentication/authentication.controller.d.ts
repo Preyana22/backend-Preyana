@@ -32,4 +32,8 @@ export declare class AuthenticationController {
     checkEmail(email: string): Promise<{
         exists: boolean;
     }>;
+    resetPassword(token: string, newPassword: string, confirmPassword: string): Promise<{
+        success: boolean;
+        message: any;
+    }>;
 }

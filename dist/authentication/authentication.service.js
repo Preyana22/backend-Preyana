@@ -21,7 +21,6 @@ const users_service_1 = require("../users/users.service");
 const email_service_1 = require("../users/email.service");
 const mailer_1 = require("@nestjs-modules/mailer");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const mongoose_1 = require("@nestjs/mongoose");
 const user_schema_1 = require("../users/user.schema");
 const mongoose_2 = require("mongoose");
@@ -84,18 +83,32 @@ let AuthenticationService = class AuthenticationService {
         if (!user) {
             throw new Error("User not found");
         }
-        const resetToken = jwt.sign({ email }, "your_secret_key", {
-            expiresIn: "1h",
-        });
+        const resetToken = this.jwtService.sign({ email }, { expiresIn: "1h" });
         await this.mailerService.sendMail({
             to: email,
             subject: "Password Reset",
             template: "../templates/forgot-password",
             context: {
                 name: user.email,
-                resetLink: `http://192.168.1.92:3001/reset`,
+                resetLink: `http://192.168.1.92:3001/reset?token=${resetToken}`,
             },
         });
+    }
+    async resetPassword(token, newPassword, confirmPassword) {
+        try {
+            const { email } = this.jwtService.verify(token);
+            const user = await this.usersService.getByEmail(email);
+            if (!user)
+                throw new Error("Invalid token");
+            if (newPassword !== confirmPassword) {
+                throw new Error("New password and confirm password do not match.");
+            }
+            const hashedPassword = await bcrypt.hash(newPassword, 10);
+            await this.usersService.updatePassword(email, hashedPassword);
+        }
+        catch (error) {
+            throw new Error(error.message || "Invalid or expired token");
+        }
     }
     async changePassword(userId, currentPassword, newPassword) {
         const user = await this.usersService.getById(userId);

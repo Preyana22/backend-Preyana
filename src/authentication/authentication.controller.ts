@@ -133,7 +133,7 @@ export class AuthenticationController {
       // Return success response if no error occurs
       return {
         success: true,
-        message: "A temporary password has been sent to your email.",
+        message: "A reset password link has been sent to your email.",
       };
     } catch (error: any) {
       console.error("Error in forgotPassword:", error.message);
@@ -222,5 +222,23 @@ export class AuthenticationController {
       email
     );
     return { exists: emailExists };
+  }
+
+  @Post("reset-password")
+  async resetPassword(
+    @Body("token") token: string,
+    @Body("newPassword") newPassword: string,
+    @Body("confirmPassword") confirmPassword: string
+  ) {
+    try {
+      await this.authenticationService.resetPassword(
+        token,
+        newPassword,
+        confirmPassword
+      );
+      return { success: true, message: "Password reset successful" };
+    } catch (error: any) {
+      return { success: false, message: error.message };
+    }
   }
 }

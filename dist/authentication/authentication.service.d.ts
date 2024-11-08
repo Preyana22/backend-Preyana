@@ -24,6 +24,7 @@ export declare class AuthenticationService {
     private verifyPassword;
     private generateTemporaryPassword;
     requestPasswordReset(email: string): Promise<void>;
+    resetPassword(token: string, newPassword: string, confirmPassword: string): Promise<void>;
     changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void>;
     checkEmailExists(email: string): Promise<boolean>;
 }

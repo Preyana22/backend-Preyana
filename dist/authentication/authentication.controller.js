@@ -81,7 +81,7 @@ let AuthenticationController = class AuthenticationController {
             await this.authenticationService.requestPasswordReset(email);
             return {
                 success: true,
-                message: "A temporary password has been sent to your email.",
+                message: "A reset password link has been sent to your email.",
             };
         }
         catch (error) {
@@ -137,6 +137,15 @@ let AuthenticationController = class AuthenticationController {
     async checkEmail(email) {
         const emailExists = await this.authenticationService.checkEmailExists(email);
         return { exists: emailExists };
+    }
+    async resetPassword(token, newPassword, confirmPassword) {
+        try {
+            await this.authenticationService.resetPassword(token, newPassword, confirmPassword);
+            return { success: true, message: "Password reset successful" };
+        }
+        catch (error) {
+            return { success: false, message: error.message };
+        }
     }
 };
 __decorate([
@@ -207,6 +216,15 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], AuthenticationController.prototype, "checkEmail", null);
+__decorate([
+    (0, common_1.Post)("reset-password"),
+    __param(0, (0, common_1.Body)("token")),
+    __param(1, (0, common_1.Body)("newPassword")),
+    __param(2, (0, common_1.Body)("confirmPassword")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:returntype", Promise)
+], AuthenticationController.prototype, "resetPassword", null);
 AuthenticationController = __decorate([
     (0, common_1.Controller)("authentication"),
     (0, common_1.UseInterceptors)((0, mongooseClassSerializer_interceptor_1.default)(user_schema_1.User)),
