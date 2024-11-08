@@ -26,7 +26,7 @@ let PostsController = class PostsController {
         let Result = [];
         const duffelHeaders = {
             "Duffel-Version": "v1",
-            Authorization: "Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
+            Authorization: "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
         };
         const getAirports = await fetch("https://api.duffel.com/places/suggestions?query=" + searchQuery, {
             method: "GET",
@@ -45,7 +45,7 @@ let PostsController = class PostsController {
             Adults.push(adultsData);
         }
         const duffel = new api_1.Duffel({
-            token: "duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
+            token: "duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
         });
         let econamy = "econamy";
         if (req.returnDate === undefined) {
@@ -92,7 +92,7 @@ let PostsController = class PostsController {
             "Accept-Encoding": "gzip",
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: "Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
+            Authorization: "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
         };
         const clone = JSON.parse(JSON.stringify(request));
         console.log(clone);
@@ -136,7 +136,7 @@ let PostsController = class PostsController {
             "Accept-Encoding": "gzip",
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: "Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
+            Authorization: "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
         };
         const createPaymentIntent = await fetch(`https://api.duffel.com/payments/payment_intents/${paymentIntent}/actions/confirm`, {
             method: "POST",
