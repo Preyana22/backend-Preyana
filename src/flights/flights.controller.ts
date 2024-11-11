@@ -113,8 +113,8 @@ export default class PostsController {
     return JSON.stringify(offerResult);
   }
 
-  @Post("book")
-  async booking(@Body() @Req() request: any) {
+  @Post("paymentIntent")
+  async paymentIntentCreate(@Body() @Req() request: any) {
     console.log("in ts");
 
     const duffelHeaders = {
@@ -140,18 +140,6 @@ export default class PostsController {
 
     console.log("payments", payments);
 
-    // Making the first API call to create the order
-    const createOrderOnDuffelResponse = await fetch(
-      "https://api.duffel.com/air/orders",
-      {
-        method: "POST",
-        headers: duffelHeaders,
-        body: JSON.stringify(data1),
-      }
-    );
-    const orderResponseText = await createOrderOnDuffelResponse.json();
-    console.log("Order Response:", orderResponseText);
-
     // Making the second API call to create the payment intent
     const createPaymentIntent = await fetch(
       "https://api.duffel.com/payments/payment_intents",
@@ -166,13 +154,57 @@ export default class PostsController {
 
     // Combining both responses into a single object
     const combinedResponse = {
-      orderResponse: orderResponseText,
       paymentIntentResponse: paymentIntentText,
     };
     console.log("Combined Response:", combinedResponse);
     // Returning the combined response as JSON
     return {
       data: combinedResponse,
+      errors: null,
+    };
+  }
+
+  @Post("book")
+  async booking(@Body() @Req() request: any) {
+    console.log("in ts");
+
+    const duffelHeaders = {
+      "Duffel-Version": "v1",
+      "Accept-Encoding": "gzip",
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization:
+        "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
+    };
+
+    const clone = JSON.parse(JSON.stringify(request));
+    console.log(clone);
+
+    var orderCreationData = { data: clone };
+
+    console.log("data");
+    console.log(orderCreationData);
+
+    // Making the first API call to create the order
+    const createOrderOnDuffelResponse = await fetch(
+      "https://api.duffel.com/air/orders",
+      {
+        method: "POST",
+        headers: duffelHeaders,
+        body: JSON.stringify(orderCreationData),
+      }
+    );
+    const orderResponseText = await createOrderOnDuffelResponse.json();
+    console.log("Order Response:", orderResponseText);
+
+    // Combining both responses into a single object
+    const orderCreationResponse = {
+      orderResponse: orderResponseText,
+    };
+    console.log("Combined Response:", orderCreationResponse);
+    // Returning the combined response as JSON
+    return {
+      data: orderCreationResponse,
       errors: null,
     };
   }

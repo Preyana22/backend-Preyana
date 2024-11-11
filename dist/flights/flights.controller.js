@@ -110,7 +110,7 @@ let PostsController = class PostsController {
     offerResult.push(offerRequest.data.offers);
     return JSON.stringify(offerResult);
   }
-  async booking(request) {
+  async paymentIntentCreate(request) {
     console.log("in ts");
     const duffelHeaders = {
       "Duffel-Version": "v1",
@@ -130,16 +130,6 @@ let PostsController = class PostsController {
     console.log(data1);
     var payments = { data: request.payments };
     console.log("payments", payments);
-    const createOrderOnDuffelResponse = await fetch(
-      "https://api.duffel.com/air/orders",
-      {
-        method: "POST",
-        headers: duffelHeaders,
-        body: JSON.stringify(data1),
-      }
-    );
-    const orderResponseText = await createOrderOnDuffelResponse.json();
-    console.log("Order Response:", orderResponseText);
     const createPaymentIntent = await fetch(
       "https://api.duffel.com/payments/payment_intents",
       {
@@ -151,12 +141,45 @@ let PostsController = class PostsController {
     const paymentIntentText = await createPaymentIntent.json();
     console.log("Payment Intent Response:", paymentIntentText);
     const combinedResponse = {
-      orderResponse: orderResponseText,
       paymentIntentResponse: paymentIntentText,
     };
     console.log("Combined Response:", combinedResponse);
     return {
       data: combinedResponse,
+      errors: null,
+    };
+  }
+  async booking(request) {
+    console.log("in ts");
+    const duffelHeaders = {
+      "Duffel-Version": "v1",
+      "Accept-Encoding": "gzip",
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization:
+        "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
+    };
+    const clone = JSON.parse(JSON.stringify(request));
+    console.log(clone);
+    var orderCreationData = { data: clone };
+    console.log("data");
+    console.log(orderCreationData);
+    const createOrderOnDuffelResponse = await fetch(
+      "https://api.duffel.com/air/orders",
+      {
+        method: "POST",
+        headers: duffelHeaders,
+        body: JSON.stringify(orderCreationData),
+      }
+    );
+    const orderResponseText = await createOrderOnDuffelResponse.json();
+    console.log("Order Response:", orderResponseText);
+    const orderCreationResponse = {
+      orderResponse: orderResponseText,
+    };
+    console.log("Combined Response:", orderCreationResponse);
+    return {
+      data: orderCreationResponse,
       errors: null,
     };
   }
@@ -224,6 +247,19 @@ __decorate(
   ],
   PostsController.prototype,
   "airliness",
+  null
+);
+__decorate(
+  [
+    (0, common_1.Post)("paymentIntent"),
+    __param(0, (0, common_1.Body)()),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise),
+  ],
+  PostsController.prototype,
+  "paymentIntentCreate",
   null
 );
 __decorate(
