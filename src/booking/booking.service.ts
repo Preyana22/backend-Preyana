@@ -113,7 +113,6 @@ export class BookingService {
               { name: { $regex: keyword, $options: "i" } },
               { airlines: { $regex: keyword, $options: "i" } },
               {
-                // Add condition for slices.arrivalAirport
                 slices: {
                   $elemMatch: {
                     arrivalAirport: { $regex: keyword, $options: "i" },
@@ -121,7 +120,6 @@ export class BookingService {
                 },
               },
               {
-                // Add condition for slices.departlAirport
                 slices: {
                   $elemMatch: {
                     departAirport: { $regex: keyword, $options: "i" },
@@ -129,7 +127,6 @@ export class BookingService {
                 },
               },
               {
-                // Add condition for slices.departlAirport
                 slices: {
                   $elemMatch: {
                     departCityName: { $regex: keyword, $options: "i" },
@@ -137,7 +134,6 @@ export class BookingService {
                 },
               },
               {
-                // Add condition for slices.departlAirport
                 slices: {
                   $elemMatch: {
                     arrivalCityName: { $regex: keyword, $options: "i" },
@@ -156,20 +152,20 @@ export class BookingService {
         // Create a date object for the start of today
         const startOfToday = new Date(currentDate.setHours(0, 0, 0, 0));
 
-        // Create a date object for the start of tomorrow
-        const startOfTomorrow = new Date(currentDate.setHours(24, 0, 0, 0));
-
         filter["slices"] = {
           $elemMatch: {
             travelDate: upcoming
-              ? { $gte: startOfToday }
-              : { $lt: startOfToday },
+              ? { $gte: startOfToday } // For upcoming bookings
+              : { $lt: startOfToday }, // For past bookings
           },
         };
       }
 
-      // Execute the query with the constructed filter
-      return await this.bookingModel.find(filter).exec();
+      // Define the sort criteria (descending order for travelDate)
+      const sortCriteria = upcoming ? { "slices.travelDate": -1 } : {};
+
+      // Execute the query with the constructed filter and sorting
+      return await this.bookingModel.find(filter).sort(sortCriteria).exec();
     } catch (error: any) {
       console.error("Error in findAll service method:", error.message);
       throw new InternalServerErrorException("Error retrieving bookings");

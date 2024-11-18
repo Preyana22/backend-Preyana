@@ -139,7 +139,6 @@ let BookingService = class BookingService {
             if (upcoming !== undefined) {
                 const currentDate = new Date();
                 const startOfToday = new Date(currentDate.setHours(0, 0, 0, 0));
-                const startOfTomorrow = new Date(currentDate.setHours(24, 0, 0, 0));
                 filter["slices"] = {
                     $elemMatch: {
                         travelDate: upcoming
@@ -148,7 +147,8 @@ let BookingService = class BookingService {
                     },
                 };
             }
-            return await this.bookingModel.find(filter).exec();
+            const sortCriteria = upcoming ? { "slices.travelDate": -1 } : {};
+            return await this.bookingModel.find(filter).sort(sortCriteria).exec();
         }
         catch (error) {
             console.error("Error in findAll service method:", error.message);
