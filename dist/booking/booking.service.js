@@ -147,7 +147,9 @@ let BookingService = class BookingService {
                     },
                 };
             }
-            const sortCriteria = upcoming ? { "slices.travelDate": -1 } : {};
+            const sortCriteria = upcoming
+                ? { "slices.travelDate": -1 }
+                : { "slices.travelDate": -1 };
             return await this.bookingModel.find(filter).sort(sortCriteria).exec();
         }
         catch (error) {

@@ -162,7 +162,9 @@ export class BookingService {
       }
 
       // Define the sort criteria (descending order for travelDate)
-      const sortCriteria = upcoming ? { "slices.travelDate": -1 } : {};
+      const sortCriteria = upcoming
+        ? { "slices.travelDate": -1 }
+        : { "slices.travelDate": -1 };
 
       // Execute the query with the constructed filter and sorting
       return await this.bookingModel.find(filter).sort(sortCriteria).exec();
