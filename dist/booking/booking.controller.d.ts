@@ -1,7 +1,9 @@
 import { BookingService } from "./booking.service";
+import { MailerService } from "@nestjs-modules/mailer";
 export declare class BookingController {
     private readonly bookingService;
-    constructor(bookingService: BookingService);
+    private readonly mailerService;
+    constructor(bookingService: BookingService, mailerService: MailerService);
     create(createBookingDto: any): Promise<{
         message: string;
         booking: import("./schemas/booking.schema").Booking;
@@ -27,4 +29,5 @@ export declare class BookingController {
     getSingleOrder(booking_id: string): Promise<any>;
     OrderCancel(booking_id: string): Promise<any>;
     OrderCancelConfirm(cancel_id: string): Promise<any>;
+    private sendBookingConfirmation;
 }

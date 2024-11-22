@@ -12,10 +12,15 @@ import {
   HttpException,
 } from "@nestjs/common";
 import { BookingService } from "./booking.service";
+import * as nodemailer from "nodemailer";
+import { MailerService } from "@nestjs-modules/mailer";
 
 @Controller("booking")
 export class BookingController {
-  constructor(private readonly bookingService: BookingService) {}
+  constructor(
+    private readonly bookingService: BookingService,
+    private readonly mailerService: MailerService
+  ) {}
 
   @Post("createbooking")
   async create(@Body() createBookingDto: any) {
@@ -23,6 +28,9 @@ export class BookingController {
     try {
       // Call the service to create a booking
       const booking = await this.bookingService.create(createBookingDto);
+      // After booking creation, send confirmation email
+      await this.sendBookingConfirmation(booking);
+
       return {
         message: "Booking created successfully",
         booking,
@@ -223,5 +231,27 @@ export class BookingController {
     );
 
     return getOrderCancelConfirm.json();
+  }
+  private async sendBookingConfirmation(booking: any) {
+    try {
+      // Send the email
+      await this.mailerService.sendMail({
+        to: booking.email,
+        subject: "Booking Confirmation",
+        template: "../templates/booking-confirmation", // Path to your email template
+        context: {
+          name: booking.name,
+          booking_reference: booking.booking_reference,
+          airlines: booking.airlines,
+          travel_date: booking.slices[0]?.travelDate,
+          flight_duration: booking.slices[0]?.flightDuration,
+        },
+      });
+
+      console.log("Booking confirmation email sent successfully.");
+    } catch (error: any) {
+      console.error("Error sending booking confirmation email:", error);
+      throw new Error("Failed to send booking confirmation email.");
+    }
   }
 }
