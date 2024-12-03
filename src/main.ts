@@ -32,6 +32,7 @@ async function bootstrap() {
         "http://preyana.com",
         "https://preyana.com",
         "https://www.preyana.com",
+        "http://localhost",
       ],
       optionsSuccessStatus: 200,
     })
