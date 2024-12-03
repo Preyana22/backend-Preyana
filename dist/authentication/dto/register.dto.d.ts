@@ -10,5 +10,6 @@ export declare class RegisterDto {
     nameOnCard: string;
     billingAddress: string;
     expirationDate: Date;
+    google_id: string;
 }
 export default RegisterDto;

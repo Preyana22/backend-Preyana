@@ -28,26 +28,42 @@ let AuthenticationController = class AuthenticationController {
         this.userService = userService;
     }
     async register(registrationData) {
-        let password = registrationData.password;
-        if (!password) {
-            password = this.generateRandomPassword();
-            console.log("Generated password:", password);
+        const { email, google_id } = registrationData;
+        const existingUser = await this.userService.getByEmail(email);
+        if (existingUser) {
             try {
-                await this.emailService.sendPasswordEmail(registrationData.email, password);
+                existingUser.google_id = google_id;
+                await this.userService.updateUser(existingUser._id, existingUser);
+                return {
+                    message: "Google ID updated for existing user",
+                    user: existingUser,
+                };
             }
             catch (error) {
-                console.error("Error sending email:", error.message);
-                throw new common_1.InternalServerErrorException("Failed to send password email. Please try again later.");
+                console.error("Error updating user:", error.message);
+                throw new common_1.InternalServerErrorException("Failed to update user. Please try again later.");
             }
         }
-        try {
-            return await this.authenticationService.register(Object.assign(Object.assign({}, registrationData), { password }));
-        }
-        catch (error) {
-            if ((error === null || error === void 0 ? void 0 : error.status) === 400) {
-                throw new common_1.HttpException(error === null || error === void 0 ? void 0 : error.response, common_1.HttpStatus.BAD_REQUEST);
+        else {
+            let password = registrationData.password;
+            if (!password) {
+                password = this.generateRandomPassword();
+                console.log("Generated password:", password);
+                try {
+                    await this.emailService.sendPasswordEmail(email, password);
+                }
+                catch (error) {
+                    console.error("Error sending email:", error.message);
+                    throw new common_1.InternalServerErrorException("Failed to send password email. Please try again later.");
+                }
             }
-            throw new common_1.InternalServerErrorException("Failed to register. Please try again later.");
+            try {
+                return await this.authenticationService.register(Object.assign(Object.assign({}, registrationData), { password }));
+            }
+            catch (error) {
+                console.error("Registration error:", error.message);
+                throw new common_1.InternalServerErrorException("Failed to register. Please try again later.");
+            }
         }
     }
     generateRandomPassword() {

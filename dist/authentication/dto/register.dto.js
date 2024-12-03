@@ -55,6 +55,10 @@ __decorate([
     (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", Date)
 ], RegisterDto.prototype, "expirationDate", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], RegisterDto.prototype, "google_id", void 0);
 exports.RegisterDto = RegisterDto;
 exports.default = RegisterDto;
 //# sourceMappingURL=register.dto.js.map

@@ -16,6 +16,7 @@ export declare class User {
     billingAddress: string;
     expirationDate: Date;
     creditCardNumber?: string;
+    google_id: string;
     posts: Post[];
 }
 declare const UserSchema: import("mongoose").Schema<Document<User, any, any>, import("mongoose").Model<Document<User, any, any>, any, any>, undefined, {}>;

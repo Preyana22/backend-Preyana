@@ -43,7 +43,7 @@ let EmailService = class EmailService {
             throw new common_1.InternalServerErrorException("Failed to send email.");
         }
     }
-    async sendResetMail(to, subject, text) {
+    async sendResetMail(to, subject, text, context) {
         await this.transporter.sendMail({
             from: "authentz-no-reply@xtensible.in",
             to,

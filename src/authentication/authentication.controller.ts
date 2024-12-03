@@ -37,48 +37,60 @@ export class AuthenticationController {
 
   @Post("register")
   async register(@Body() registrationData: RegisterDto) {
-    // Check if the password field is empty
-    let password = registrationData.password;
+    const { email, google_id } = registrationData;
 
-    if (!password) {
-      // Generate a random password
-      password = this.generateRandomPassword();
-      console.log("Generated password:", password);
+    // Check if the user already exists by email
+    const existingUser = await this.userService.getByEmail(email);
 
-      // Attempt to send the generated password to the user's email
+    if (existingUser) {
+      // Update the google_id if the user exists
       try {
-        await this.emailService.sendPasswordEmail(
-          registrationData.email,
-          password
-        );
+        existingUser.google_id = google_id;
+        await this.userService.updateUser(existingUser._id, existingUser);
+        return {
+          message: "Google ID updated for existing user",
+          user: existingUser,
+        };
       } catch (error: any) {
-        console.error("Error sending email:", error.message);
-
-        // Handle email sending failure
+        console.error("Error updating user:", error.message);
         throw new InternalServerErrorException(
-          "Failed to send password email. Please try again later."
+          "Failed to update user. Please try again later."
         );
       }
-    }
+    } else {
+      // Generate a random password if the email does not exist
+      let password = registrationData.password;
 
-    // Proceed with the registration process if the email was sent successfully
-    try {
-      return await this.authenticationService.register({
-        ...registrationData,
-        password,
-      });
-    } catch (error: any) {
-      // Handle duplicate email error
-      if ((error as any)?.status === 400) {
-        throw new HttpException(
-          (error as any)?.response,
-          HttpStatus.BAD_REQUEST
-        );
+      if (!password) {
+        password = this.generateRandomPassword();
+        console.log("Generated password:", password);
+
+        // Attempt to send the generated password to the user's email
+        try {
+          await this.emailService.sendPasswordEmail(email, password);
+        } catch (error: any) {
+          console.error("Error sending email:", error.message);
+
+          // Handle email sending failure
+          throw new InternalServerErrorException(
+            "Failed to send password email. Please try again later."
+          );
+        }
       }
 
-      throw new InternalServerErrorException(
-        "Failed to register. Please try again later."
-      );
+      // Create a new user with the provided data and generated password
+      try {
+        return await this.authenticationService.register({
+          ...registrationData,
+          password,
+        });
+      } catch (error: any) {
+        // Handle other registration errors
+        console.error("Registration error:", error.message);
+        throw new InternalServerErrorException(
+          "Failed to register. Please try again later."
+        );
+      }
     }
   }
 

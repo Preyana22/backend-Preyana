@@ -38,7 +38,12 @@ export class EmailService {
     }
   }
 
-  async sendResetMail(to: string, subject: string, text: string) {
+  async sendResetMail(
+    to: string,
+    subject: string,
+    text: string,
+    context: string
+  ) {
     await this.transporter.sendMail({
       from: "authentz-no-reply@xtensible.in",
       to,

@@ -77,6 +77,10 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "creditCardNumber", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], User.prototype, "google_id", void 0);
+__decorate([
     (0, class_transformer_1.Type)(() => flights_schema_1.Post),
     __metadata("design:type", Array)
 ], User.prototype, "posts", void 0);

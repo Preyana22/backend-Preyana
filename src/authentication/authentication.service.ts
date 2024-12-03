@@ -123,15 +123,20 @@ export class AuthenticationService {
     const resetToken = this.jwtService.sign({ email }, { expiresIn: "1h" });
 
     // Send reset password email
-    await this.mailerService.sendMail({
-      to: email,
-      subject: "Password Reset",
-      template: "../templates/forgot-password", // Path to your email template
-      context: {
-        name: user.email,
-        resetLink: `http://192.168.1.92:3001/reset?token=${resetToken}`,
-      },
-    });
+    try {
+      await this.mailerService.sendMail({
+        to: email,
+        subject: "Password Reset",
+        template: "../templates/forgot-password",
+        context: {
+          name: user.email,
+          resetLink: `http://192.168.1.92:3001/reset?token=${resetToken}`,
+        },
+      });
+    } catch (error: any) {
+      console.error("Error sending reset password email:", error.message);
+      throw new Error("Failed to send reset email.");
+    }
   }
 
   async resetPassword(

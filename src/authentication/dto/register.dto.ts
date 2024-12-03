@@ -37,6 +37,9 @@ export class RegisterDto {
 
   @Prop({ required: false })
   expirationDate: Date;
+
+  @Prop({ required: false })
+  google_id: string;
 }
 
 export default RegisterDto;

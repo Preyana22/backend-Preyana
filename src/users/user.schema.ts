@@ -65,6 +65,9 @@ export class User {
   })
   creditCardNumber?: string;
 
+  @Prop({ required: false })
+  google_id: string;
+
   @Type(() => Post)
   posts: Post[];
 }
