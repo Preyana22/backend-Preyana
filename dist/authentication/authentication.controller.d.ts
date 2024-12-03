@@ -12,6 +12,12 @@ export declare class AuthenticationController {
     register(registrationData: RegisterDto): Promise<{
         message: string;
         user: import("../users/user.schema").UserDocument;
+    } | {
+        message: string;
+        user: {
+            message: string;
+            user: import("../users/user.schema").UserDocument;
+        };
     }>;
     private generateRandomPassword;
     logIn(request: RequestWithUser): Promise<import("../users/user.schema").UserDocument>;

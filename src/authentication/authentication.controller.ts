@@ -40,16 +40,25 @@ export class AuthenticationController {
     const { email, google_id } = registrationData;
 
     // Check if the user already exists by email
-    const existingUser = await this.userService.getByEmail(email);
+    const user = await this.userService.getByEmail(email);
 
-    if (existingUser) {
+    if (user) {
       // Update the google_id if the user exists
       try {
-        existingUser.google_id = google_id;
-        await this.userService.updateUser(existingUser._id, existingUser);
+        user.google_id = google_id;
+        await this.userService.updateUser(user._id, user);
+
+        if (!user) {
+          throw new NotFoundException("User not found");
+        }
+
+        // Manually convert _id to a string
+        user._id = user._id.toString(); // Convert _id to string before returning user details
+        console.log("existingUser", user);
+
         return {
           message: "Google ID updated for existing user",
-          user: existingUser,
+          user: user, // Clean the user document before returning
         };
       } catch (error: any) {
         console.error("Error updating user:", error.message);
@@ -80,10 +89,15 @@ export class AuthenticationController {
 
       // Create a new user with the provided data and generated password
       try {
-        return await this.authenticationService.register({
+        const newUser = await this.authenticationService.register({
           ...registrationData,
           password,
         });
+
+        return {
+          message: "User registered successfully",
+          user: newUser, // Clean the new user document before returning
+        };
       } catch (error: any) {
         // Handle other registration errors
         console.error("Registration error:", error.message);

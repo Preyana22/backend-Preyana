@@ -29,14 +29,19 @@ let AuthenticationController = class AuthenticationController {
     }
     async register(registrationData) {
         const { email, google_id } = registrationData;
-        const existingUser = await this.userService.getByEmail(email);
-        if (existingUser) {
+        const user = await this.userService.getByEmail(email);
+        if (user) {
             try {
-                existingUser.google_id = google_id;
-                await this.userService.updateUser(existingUser._id, existingUser);
+                user.google_id = google_id;
+                await this.userService.updateUser(user._id, user);
+                if (!user) {
+                    throw new common_1.NotFoundException("User not found");
+                }
+                user._id = user._id.toString();
+                console.log("existingUser", user);
                 return {
                     message: "Google ID updated for existing user",
-                    user: existingUser,
+                    user: user,
                 };
             }
             catch (error) {
@@ -58,7 +63,11 @@ let AuthenticationController = class AuthenticationController {
                 }
             }
             try {
-                return await this.authenticationService.register(Object.assign(Object.assign({}, registrationData), { password }));
+                const newUser = await this.authenticationService.register(Object.assign(Object.assign({}, registrationData), { password }));
+                return {
+                    message: "User registered successfully",
+                    user: newUser,
+                };
             }
             catch (error) {
                 console.error("Registration error:", error.message);
