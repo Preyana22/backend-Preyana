@@ -26,7 +26,15 @@ __decorate([
 __decorate([
     (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", String)
-], RegisterDto.prototype, "name", void 0);
+], RegisterDto.prototype, "firstName", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], RegisterDto.prototype, "middleName", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], RegisterDto.prototype, "lastName", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", Date)
@@ -46,7 +54,19 @@ __decorate([
 __decorate([
     (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", String)
+], RegisterDto.prototype, "state", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], RegisterDto.prototype, "zip", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
 ], RegisterDto.prototype, "nameOnCard", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], RegisterDto.prototype, "cardNumber", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", String)

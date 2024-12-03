@@ -109,7 +109,7 @@ let UsersService = class UsersService {
     async update(id, updateBookingDto) {
         return this.userModel
             .findByIdAndUpdate(id, updateBookingDto, { new: true })
-            .lean();
+            .exec();
     }
 };
 UsersService = __decorate([

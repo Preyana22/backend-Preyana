@@ -29,7 +29,7 @@ export class BookingController {
       // Call the service to create a booking
       const booking = await this.bookingService.create(createBookingDto);
       // After booking creation, send confirmation email
-      await this.sendBookingConfirmation(booking);
+      const confirmation = await this.sendBookingConfirmation(booking);
 
       return {
         message: "Booking created successfully",
@@ -166,7 +166,7 @@ export class BookingController {
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization:
-        "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
+        "Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
     };
 
     const getOrder = await fetch(
@@ -194,7 +194,7 @@ export class BookingController {
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization:
-        "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
+        "Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
     };
 
     const getOrderCancel = await fetch(
@@ -219,7 +219,7 @@ export class BookingController {
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization:
-        "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
+        "Bearer duffel_test_yCD3_H1fhAlpyuCarmZSIdUFaUwFAIUN4wKBksSS0DD",
     };
 
     const getOrderCancelConfirm = await fetch(

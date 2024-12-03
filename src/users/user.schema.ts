@@ -22,8 +22,6 @@ export class User {
   @Prop()
   userName: string;
 
-  fullName: string;
-
   @Prop()
   @Exclude()
   password: string;
@@ -32,7 +30,13 @@ export class User {
   address: string;
 
   @Prop({ required: false })
-  name: string;
+  firstName: string;
+
+  @Prop({ required: false })
+  middleName: string;
+
+  @Prop({ required: false })
+  lastName: string;
 
   @Prop({ required: false })
   birthDate: Date;
@@ -44,7 +48,16 @@ export class User {
   phoneNo: string;
 
   @Prop({ required: false })
+  state: string;
+
+  @Prop({ required: false })
+  zip: string;
+
+  @Prop({ required: false })
   nameOnCard: string;
+
+  @Prop({ required: false })
+  cardNumber: string;
 
   @Prop({ required: false })
   billingAddress: string;
