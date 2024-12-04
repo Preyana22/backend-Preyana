@@ -45,7 +45,7 @@ let BookingController = class BookingController {
     console.log("createbooking", createBookingDto);
     try {
       const booking = await this.bookingService.create(createBookingDto);
-      await this.sendBookingConfirmation(booking);
+      const confirmation = await this.sendBookingConfirmation(booking);
       return {
         message: "Booking created successfully",
         booking,

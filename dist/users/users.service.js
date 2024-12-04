@@ -30,9 +30,6 @@ let UsersService = class UsersService {
                 path: "email",
             },
         });
-        if (!user) {
-            throw new common_1.NotFoundException();
-        }
         return user;
     }
     async getById(id) {

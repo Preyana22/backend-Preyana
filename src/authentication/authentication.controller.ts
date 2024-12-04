@@ -37,15 +37,24 @@ export class AuthenticationController {
 
   @Post("register")
   async register(@Body() registrationData: RegisterDto) {
-    const { email, google_id } = registrationData;
+    const { email, google_id, facebook_id } = registrationData;
 
+    // Generate a random password if the email does not exist
+    let password = registrationData.password;
     // Check if the user already exists by email
     const user = await this.userService.getByEmail(email);
 
     if (user) {
       // Update the google_id if the user exists
       try {
-        user.google_id = google_id;
+        // Update Google ID if provided
+        if (google_id) {
+          user.google_id = google_id;
+        }
+        // Update Facebook ID if provided
+        if (facebook_id) {
+          user.facebook_id = facebook_id;
+        }
         await this.userService.updateUser(user._id, user);
 
         if (!user) {
@@ -57,7 +66,7 @@ export class AuthenticationController {
         console.log("existingUser", user);
 
         return {
-          message: "Google ID updated for existing user",
+          message: "Google ID or Facebook ID updated for existing user",
           user: user, // Clean the user document before returning
         };
       } catch (error: any) {
@@ -67,9 +76,6 @@ export class AuthenticationController {
         );
       }
     } else {
-      // Generate a random password if the email does not exist
-      let password = registrationData.password;
-
       if (!password) {
         password = this.generateRandomPassword();
         console.log("Generated password:", password);
@@ -86,7 +92,10 @@ export class AuthenticationController {
           );
         }
       }
+    }
 
+    if (!user) {
+      console.log("No existing user found, creating a new user.");
       // Create a new user with the provided data and generated password
       try {
         const newUser = await this.authenticationService.register({

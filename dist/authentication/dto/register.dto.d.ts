@@ -16,5 +16,6 @@ export declare class RegisterDto {
     billingAddress: string;
     expirationDate: Date;
     google_id: string;
+    facebook_id: string;
 }
 export default RegisterDto;

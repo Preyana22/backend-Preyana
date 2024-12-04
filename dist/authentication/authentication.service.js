@@ -54,13 +54,15 @@ let AuthenticationService = class AuthenticationService {
         return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
     }
     async getAuthenticatedUser(email, plainTextPassword) {
-        try {
-            const user = await this.usersService.getByEmail(email);
-            await this.verifyPassword(plainTextPassword, user.password);
-            return user;
-        }
-        catch (error) {
-            throw new common_1.HttpException("Wrong credentials provided", common_1.HttpStatus.BAD_REQUEST);
+        const user = await this.usersService.getByEmail(email);
+        if (user) {
+            try {
+                await this.verifyPassword(plainTextPassword, user.password);
+                return user;
+            }
+            catch (error) {
+                throw new common_1.HttpException("Wrong credentials provided", common_1.HttpStatus.BAD_REQUEST);
+            }
         }
     }
     async verifyPassword(plainTextPassword, hashedPassword) {

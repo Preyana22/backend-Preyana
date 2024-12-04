@@ -81,6 +81,9 @@ export class User {
   @Prop({ required: false })
   google_id: string;
 
+  @Prop({ required: false })
+  facebook_id: string;
+
   @Type(() => Post)
   posts: Post[];
 }

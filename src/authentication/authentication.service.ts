@@ -70,15 +70,19 @@ export class AuthenticationService {
   }
 
   public async getAuthenticatedUser(email: string, plainTextPassword: string) {
-    try {
-      const user = await this.usersService.getByEmail(email);
-      await this.verifyPassword(plainTextPassword, user.password);
-      return user;
-    } catch (error) {
-      throw new HttpException(
-        "Wrong credentials provided",
-        HttpStatus.BAD_REQUEST
-      );
+    const user = await this.usersService.getByEmail(email);
+
+    if (user) {
+      try {
+        await this.verifyPassword(plainTextPassword, user.password);
+
+        return user;
+      } catch (error) {
+        throw new HttpException(
+          "Wrong credentials provided",
+          HttpStatus.BAD_REQUEST
+        );
+      }
     }
   }
 

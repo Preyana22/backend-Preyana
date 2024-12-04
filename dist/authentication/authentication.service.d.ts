@@ -20,7 +20,7 @@ export declare class AuthenticationService {
     }>;
     getCookieWithJwtToken(userId: string): string;
     getCookieForLogOut(): string;
-    getAuthenticatedUser(email: string, plainTextPassword: string): Promise<UserDocument>;
+    getAuthenticatedUser(email: string, plainTextPassword: string): Promise<UserDocument | undefined>;
     private verifyPassword;
     private generateTemporaryPassword;
     requestPasswordReset(email: string): Promise<void>;

@@ -28,10 +28,7 @@ class UsersService {
       },
     });
 
-    if (!user) {
-      throw new NotFoundException();
-    }
-
+    // Return user directly; will return null/undefined if no user is found
     return user;
   }
 

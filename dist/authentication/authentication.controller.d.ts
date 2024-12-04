@@ -18,9 +18,9 @@ export declare class AuthenticationController {
             message: string;
             user: import("../users/user.schema").UserDocument;
         };
-    }>;
+    } | undefined>;
     private generateRandomPassword;
-    logIn(request: RequestWithUser): Promise<import("../users/user.schema").UserDocument>;
+    logIn(request: RequestWithUser): Promise<import("../users/user.schema").UserDocument | undefined>;
     logOut(request: RequestWithUser): Promise<void>;
     authenticate(request: RequestWithUser): import("../users/user.schema").UserDocument;
     forgotPassword(email: string): Promise<{

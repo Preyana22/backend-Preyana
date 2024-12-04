@@ -55,6 +55,9 @@ export class RegisterDto {
 
   @Prop({ required: false })
   google_id: string;
+
+  @Prop({ required: false })
+  facebook_id: string;
 }
 
 export default RegisterDto;

@@ -17,12 +17,9 @@ const authentication_service_1 = require("./authentication.service");
 let LocalStrategy = class LocalStrategy extends (0, passport_1.PassportStrategy)(passport_local_1.Strategy) {
     constructor(authenticationService) {
         super({
-            usernameField: 'email',
+            usernameField: "email",
         });
         this.authenticationService = authenticationService;
-    }
-    async validate(email, password) {
-        return this.authenticationService.getAuthenticatedUser(email, password);
     }
 };
 LocalStrategy = __decorate([

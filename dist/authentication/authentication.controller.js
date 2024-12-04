@@ -28,11 +28,17 @@ let AuthenticationController = class AuthenticationController {
         this.userService = userService;
     }
     async register(registrationData) {
-        const { email, google_id } = registrationData;
+        const { email, google_id, facebook_id } = registrationData;
+        let password = registrationData.password;
         const user = await this.userService.getByEmail(email);
         if (user) {
             try {
-                user.google_id = google_id;
+                if (google_id) {
+                    user.google_id = google_id;
+                }
+                if (facebook_id) {
+                    user.facebook_id = facebook_id;
+                }
                 await this.userService.updateUser(user._id, user);
                 if (!user) {
                     throw new common_1.NotFoundException("User not found");
@@ -40,7 +46,7 @@ let AuthenticationController = class AuthenticationController {
                 user._id = user._id.toString();
                 console.log("existingUser", user);
                 return {
-                    message: "Google ID updated for existing user",
+                    message: "Google ID or Facebook ID updated for existing user",
                     user: user,
                 };
             }
@@ -50,7 +56,6 @@ let AuthenticationController = class AuthenticationController {
             }
         }
         else {
-            let password = registrationData.password;
             if (!password) {
                 password = this.generateRandomPassword();
                 console.log("Generated password:", password);
@@ -62,6 +67,9 @@ let AuthenticationController = class AuthenticationController {
                     throw new common_1.InternalServerErrorException("Failed to send password email. Please try again later.");
                 }
             }
+        }
+        if (!user) {
+            console.log("No existing user found, creating a new user.");
             try {
                 const newUser = await this.authenticationService.register(Object.assign(Object.assign({}, registrationData), { password }));
                 return {

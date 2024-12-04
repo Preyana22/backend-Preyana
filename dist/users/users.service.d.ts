@@ -7,7 +7,7 @@ declare class UsersService {
     private userModel;
     private readonly connection;
     constructor(userModel: Model<UserDocument>, connection: mongoose.Connection);
-    getByEmail(email: string): Promise<UserDocument>;
+    getByEmail(email: string): Promise<UserDocument | null>;
     getById(id: string): Promise<UserDocument>;
     create(userData: CreateUserDto): Promise<{
         message: string;
