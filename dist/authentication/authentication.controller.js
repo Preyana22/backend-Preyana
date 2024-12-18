@@ -151,7 +151,6 @@ let AuthenticationController = class AuthenticationController {
         }
     }
     async updateUser(id, updateUserDto) {
-        console.log("updateUserDto", updateUserDto);
         try {
             const updatedUser = await this.userService.updateUser(id, updateUserDto);
             if (!updatedUser) {

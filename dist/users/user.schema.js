@@ -29,7 +29,6 @@ __decorate([
 ], User.prototype, "userName", void 0);
 __decorate([
     (0, mongoose_1.Prop)(),
-    (0, class_transformer_1.Exclude)(),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([

@@ -226,8 +226,6 @@ export class AuthenticationController {
     @Param("id") id: string,
     @Body() updateUserDto: RegisterDto
   ): Promise<{ message: string; user: User | null }> {
-    console.log("updateUserDto", updateUserDto);
-
     try {
       const updatedUser = await this.userService.updateUser(id, updateUserDto);
 

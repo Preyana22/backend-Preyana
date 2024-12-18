@@ -37,6 +37,7 @@ let UsersService = class UsersService {
             path: "users",
             populate: {
                 path: "email",
+                select: "*",
             },
         });
         if (!user) {

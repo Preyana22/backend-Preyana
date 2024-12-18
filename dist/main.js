@@ -13,9 +13,10 @@ async function bootstrap() {
         origin: [
             "http://localhost:3001",
             "http://localhost:3002",
+            "http://localhost:3003",
             "http://52.14.78.149",
-            "http://192.168.1.92:3001",
-            "http://192.168.1.92",
+            "http://192.168.1.90:3001",
+            "http://192.168.1.90",
             "http://preyana.com",
             "https://preyana.com",
             "https://www.preyana.com",

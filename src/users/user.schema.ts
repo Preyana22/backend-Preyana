@@ -23,7 +23,6 @@ export class User {
   userName: string;
 
   @Prop()
-  @Exclude()
   password: string;
 
   @Prop({ required: false })
