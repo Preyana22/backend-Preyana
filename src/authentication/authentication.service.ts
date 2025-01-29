@@ -134,7 +134,7 @@ export class AuthenticationService {
         template: "../templates/forgot-password",
         context: {
           name: user.email,
-          resetLink: `http://192.168.1.92:3001/reset?token=${resetToken}`,
+          resetLink: `https://preyana.com/reset?token=${resetToken}`,
         },
       });
     } catch (error: any) {

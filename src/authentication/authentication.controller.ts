@@ -66,7 +66,7 @@ export class AuthenticationController {
         console.log("existingUser", user);
 
         return {
-          message: "Google ID or Facebook ID updated for existing user",
+          message: "Registration successfully!!",
           user: user, // Clean the user document before returning
         };
       } catch (error: any) {
