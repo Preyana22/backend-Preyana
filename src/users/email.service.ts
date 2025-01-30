@@ -19,7 +19,7 @@ export class EmailService {
 
   async sendPasswordEmail(recipientEmail: string, password: string) {
     const mailOptions = {
-      from: "authentz-no-reply@xtensible.in", // Your email address
+      from: '"Preyana" <contact@preyana.com>',
       to: recipientEmail,
       subject: "Your Account Password",
       text: `Here is your generated password: ${password}`,
@@ -45,7 +45,7 @@ export class EmailService {
     context: string
   ) {
     await this.transporter.sendMail({
-      from: "authentz-no-reply@xtensible.in",
+      from: '"Preyana" <contact@preyana.com>',
       to,
       subject,
       text,

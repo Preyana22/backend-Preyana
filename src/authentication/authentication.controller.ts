@@ -14,6 +14,7 @@ import {
   HttpStatus,
   HttpException,
   Query,
+  ConflictException,
 } from "@nestjs/common";
 import { AuthenticationService } from "./authentication.service";
 import RegisterDto from "./dto/register.dto";
@@ -37,37 +38,32 @@ export class AuthenticationController {
 
   @Post("register")
   async register(@Body() registrationData: RegisterDto) {
-    const { email, google_id, facebook_id } = registrationData;
+    const { email, google_id, facebook_id, password } = registrationData;
 
-    // Generate a random password if the email does not exist
-    let password = registrationData.password;
-    // Check if the user already exists by email
     const user = await this.userService.getByEmail(email);
 
+    // Check if the user exists and has a non-empty password
+    if (user && user.password) {
+      console.log("User already exists with email and password:", email);
+      throw new ConflictException("User already exists with this email.");
+    }
+
     if (user) {
-      // Update the google_id if the user exists
       try {
-        // Update Google ID if provided
-        if (google_id) {
-          user.google_id = google_id;
-        }
-        // Update Facebook ID if provided
-        if (facebook_id) {
-          user.facebook_id = facebook_id;
-        }
+        if (google_id) user.google_id = google_id;
+        if (facebook_id) user.facebook_id = facebook_id;
         await this.userService.updateUser(user._id, user);
 
         if (!user) {
           throw new NotFoundException("User not found");
         }
 
-        // Manually convert _id to a string
-        user._id = user._id.toString(); // Convert _id to string before returning user details
+        user._id = user._id.toString();
         console.log("existingUser", user);
 
         return {
-          message: "Registration successfully!!",
-          user: user, // Clean the user document before returning
+          message: "Registration successful!!",
+          user: user,
         };
       } catch (error: any) {
         console.error("Error updating user:", error.message);
@@ -76,39 +72,34 @@ export class AuthenticationController {
         );
       }
     } else {
+      let newPassword = password;
       if (!password) {
-        password = this.generateRandomPassword();
-        console.log("Generated password:", password);
-
-        // Attempt to send the generated password to the user's email
-        try {
-          await this.emailService.sendPasswordEmail(email, password);
-        } catch (error: any) {
-          console.error("Error sending email:", error.message);
-
-          // Handle email sending failure
-          throw new InternalServerErrorException(
-            "Failed to send password email. Please try again later."
-          );
-        }
+        newPassword = this.generateRandomPassword();
+        console.log("Generated password:", newPassword);
       }
-    }
 
-    if (!user) {
       console.log("No existing user found, creating a new user.");
-      // Create a new user with the provided data and generated password
       try {
         const newUser = await this.authenticationService.register({
           ...registrationData,
-          password,
+          password: newPassword,
         });
+
+        // Send welcome email to the user
+        try {
+          await this.emailService.sendPasswordEmail(email, newPassword);
+        } catch (error: any) {
+          console.error("Error sending email:", error.message);
+          throw new InternalServerErrorException(
+            "Failed to send welcome email. Please try again later."
+          );
+        }
 
         return {
           message: "User registered successfully",
-          user: newUser, // Clean the new user document before returning
+          user: newUser,
         };
       } catch (error: any) {
-        // Handle other registration errors
         console.error("Registration error:", error.message);
         throw new InternalServerErrorException(
           "Failed to register. Please try again later."
