@@ -9,10 +9,10 @@ export class EmailService {
     this.transporter = nodemailer.createTransport({
       host: "email-smtp.us-east-2.amazonaws.com",
       port: 587,
-      secure: false, // true for 465, false for 587
+      secure: false,
       auth: {
-        user: "AKIAZR7XQOHLCFM35Q65", // Your Gmail address
-        pass: "BMIVwk4atHlHo+QYzxMdaInDXn2FKT9hOYqN3OGdTCbI", // Your Gmail password
+        user: "AKIAZR7XQOHLCFM35Q65",
+        pass: "BMIVwk4atHlHo+QYzxMdaInDXn2FKT9hOYqN3OGdTCbI",
       },
     });
   }

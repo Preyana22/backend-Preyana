@@ -10,6 +10,7 @@ import {
   Query,
   HttpStatus,
   HttpException,
+  InternalServerErrorException,
 } from "@nestjs/common";
 import { BookingService } from "./booking.service";
 import * as nodemailer from "nodemailer";
@@ -28,11 +29,19 @@ export class BookingController {
     try {
       // Call the service to create a booking
       const booking = await this.bookingService.create(createBookingDto);
-      // After booking creation, send confirmation email
-      const confirmation = await this.sendBookingConfirmation(booking);
+
+      // Send booking confirmation email
+      try {
+        await this.sendBookingConfirmation(booking);
+      } catch (emailError: any) {
+        console.error("Error sending confirmation email:", emailError.message);
+        throw new InternalServerErrorException(
+          "Booking created, but failed to send confirmation email."
+        );
+      }
 
       return {
-        message: "Booking created successfully",
+        message: "Booking created successfully, confirmation email sent.",
         booking,
       };
     } catch (error: any) {
@@ -50,7 +59,6 @@ export class BookingController {
           HttpStatus.CONFLICT
         );
       } else {
-        // Generic error response
         throw new HttpException(
           "An unexpected error occurred while creating the booking.",
           HttpStatus.INTERNAL_SERVER_ERROR
@@ -209,9 +217,13 @@ export class BookingController {
     return getOrderCancel.json();
   }
 
-  @Get("ordercancelconfirm/:cancel_id")
-  async OrderCancelConfirm(@Param("cancel_id") cancel_id: string) {
-    console.log(cancel_id);
+  @Get("ordercancelconfirm/:cancel_id/:email")
+  async OrderCancelConfirm(
+    @Param("cancel_id") cancel_id: string,
+    @Param("email") email: string
+  ) {
+    console.log("Cancel ID:", cancel_id);
+    console.log("Email:", email);
 
     const duffelHeaders = {
       "Duffel-Version": "v1",
@@ -222,16 +234,53 @@ export class BookingController {
         "Bearer duffel_live_iVxhZcQG0tlGfWgY9aq4ZuRCV-m4GwIDGmljueNXgKq",
     };
 
-    const getOrderCancelConfirm = await fetch(
-      `https://api.duffel.com/air/order_cancellations/${cancel_id}/actions/confirm`,
-      {
-        method: "POST",
-        headers: duffelHeaders,
-      }
-    );
+    try {
+      // Fetch Duffel API confirmation
+      const getOrderCancelConfirm = await fetch(
+        `https://api.duffel.com/air/order_cancellations/${cancel_id}/actions/confirm`,
+        {
+          method: "POST",
+          headers: duffelHeaders,
+        }
+      );
 
-    return getOrderCancelConfirm.json();
+      // Parse response only ONCE
+      const confirmationResponse = await getOrderCancelConfirm.json();
+
+      // Ensure data exists in response
+      if (!confirmationResponse || !confirmationResponse.data) {
+        throw new Error("Invalid response from Duffel API.");
+      }
+
+      const { refund_to, refund_currency, refund_amount, order_id } =
+        confirmationResponse.data;
+
+      // Send cancellation email
+      try {
+        await this.sendCancellationEmail(email, cancel_id, {
+          refund_to,
+          refund_currency,
+          refund_amount,
+          order_id,
+        });
+        console.log(`Cancellation email sent to ${email}`);
+      } catch (error: any) {
+        console.error("Error sending cancellation email:", error.message);
+        throw new InternalServerErrorException(
+          "Failed to send cancellation email. Please try again later."
+        );
+      }
+
+      // ✅ Return the already parsed response
+      return confirmationResponse;
+    } catch (error: any) {
+      console.error("Error confirming cancellation:", error.message);
+      throw new InternalServerErrorException(
+        "Failed to confirm cancellation. Please try again later."
+      );
+    }
   }
+
   private async sendBookingConfirmation(booking: any) {
     try {
       // Send the email
@@ -249,6 +298,42 @@ export class BookingController {
       });
 
       console.log("Booking confirmation email sent successfully.");
+    } catch (error: any) {
+      console.error("Error sending booking confirmation email:", error);
+      throw new Error("Failed to send booking confirmation email.");
+    }
+  }
+
+  private async sendCancellationEmail(
+    email: any,
+    cancel_id: any,
+    canceldetail: {
+      refund_to: string;
+      refund_currency: string;
+      refund_amount: string;
+      order_id: string;
+    }
+  ) {
+    console.log("canceldetail", canceldetail);
+    const { refund_to, refund_currency, refund_amount, order_id } =
+      canceldetail;
+    try {
+      // Send the email
+      await this.mailerService.sendMail({
+        to: email,
+        subject: "Booking Cancellation",
+        template: "../templates/booking-cancellation", // Path to your email template
+        context: {
+          name: email,
+          cancel_id: cancel_id,
+          refund_to: refund_to,
+          refund_currency: refund_currency,
+          refund_amount: refund_amount,
+          order_id: order_id,
+        },
+      });
+
+      console.log("Booking cancellation email sent successfully.");
     } catch (error: any) {
       console.error("Error sending booking confirmation email:", error);
       throw new Error("Failed to send booking confirmation email.");
